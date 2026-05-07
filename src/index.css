@@ -3,22 +3,34 @@
 @tailwind utilities;
 
 :root {
-  /* Background */
-  --bg-main: #0d1b2a;
-  --bg-soft: #f8fafc;
+  /* Brand palette */
+  --navy: #0d1b2a;
+  --navy-80: rgba(13, 27, 42, 0.8);
+  --navy-10: rgba(13, 27, 42, 0.06);
+  --sky: #2fa4d7;
+  --sky-dim: rgba(47, 164, 215, 0.1);
+  --sky-mid: rgba(47, 164, 215, 0.2);
+  --white: #ffffff;
+  --cloud: #f8fafc;
+  --mist: #8ba8c4;
+  --mist-light: rgba(139, 168, 196, 0.18);
 
-  /* Text */
-  --ink: #ffffff;
-  --ink-100: rgba(255, 255, 255, 0.08);
-  --ink-200: rgba(255, 255, 255, 0.16);
-  --ink-300: #8ba8c4;
-  --ink-400: #9fb8d1;
-  --ink-500: #cbd5e1;
+  /* Semantic aliases (used throughout components) */
+  --ink: var(--navy);
+  --ink-50: var(--cloud);
+  --ink-100: #e4edf5; /* slightly blue-tinted rule lines */
+  --ink-200: #c8d9e8;
+  --ink-300: var(--mist);
+  --ink-400: #6a8fae;
+  --ink-500: #4a6e8e;
+  --ink-600: #2a4e6e;
+  --ink-700: var(--navy);
+  --ink-800: var(--navy);
+  --ink-900: var(--navy);
 
-  /* Accent (Futuristic Blue) */
-  --accent: #38bdf8;
-  --accent-dim: rgba(56, 189, 248, 0.08);
-  --accent-mid: rgba(56, 189, 248, 0.18);
+  --accent: var(--sky);
+  --accent-dim: var(--sky-dim);
+  --accent-mid: var(--sky-mid);
 }
 
 * {
@@ -32,12 +44,12 @@ html {
 }
 
 body {
-  background: var(--bg-main);
-  color: var(--ink);
+  background: var(--cloud);
+  color: var(--navy);
   font-family: "DM Sans", sans-serif;
   font-weight: 300;
   overflow-x: hidden;
-  cursor: default;
+  cursor: none;
 }
 
 /* Custom cursor */
@@ -45,18 +57,17 @@ body {
   position: fixed;
   width: 8px;
   height: 8px;
-  background: var(--accent);
+  background: var(--sky);
   border-radius: 50%;
   pointer-events: none;
   z-index: 9999;
   transition: transform 0.15s ease;
-  mix-blend-mode: normal;
 }
 .cursor-ring {
   position: fixed;
   width: 32px;
   height: 32px;
-  border: 1px solid var(--ink-300);
+  border: 1px solid var(--mist);
   border-radius: 50%;
   pointer-events: none;
   z-index: 9998;
@@ -65,8 +76,8 @@ body {
 .cursor-ring.hover {
   width: 48px;
   height: 48px;
-  border-color: var(--accent);
-  background: var(--accent-dim);
+  border-color: var(--sky);
+  background: var(--sky-dim);
 }
 
 /* Scrollbar */
@@ -240,8 +251,4 @@ body::before {
   background: var(--accent);
   border-radius: 50%;
   vertical-align: middle;
-}
-
-.glow {
-  box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);
 }

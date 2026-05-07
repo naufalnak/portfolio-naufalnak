@@ -1,6 +1,7 @@
-import { useReveal } from "../{components,pages,data,hooks,utils}/useReveal";
+import { useReveal } from "../hooks/useReveal";
 import { personal } from "../data/portfolio";
 import { MapPin, Mail, Github, Linkedin, Download } from "lucide-react";
+import foto from "../assets/me.png";
 
 export default function About() {
   const h = useReveal();
@@ -8,77 +9,67 @@ export default function About() {
   const r = useReveal();
 
   return (
-    <section
-      id="about"
-      className="py-32 border-t"
-      style={{ borderColor: "var(--ink-100)" }}>
+    // ABOUT — Pure White, clean breathing room after dark hero
+    <section id="about" className="py-32" style={{ background: "#FFFFFF" }}>
       <div className="max-w-6xl mx-auto px-8">
-        {/* Header */}
         <div ref={h} className="reveal flex items-center gap-6 mb-20">
           <span className="section-num">01</span>
           <div className="rule flex-1" />
           <h2
             className="font-display text-3xl font-semibold"
-            style={{ color: "var(--ink)" }}>
+            style={{ color: "#0D1B2A" }}>
             About
           </h2>
         </div>
 
         <div className="grid md:grid-cols-5 gap-16 items-start">
-          {/* Left */}
           <div ref={l} className="reveal-left md:col-span-2">
-            {/* Avatar block */}
-            <div className="relative mb-10 w-48" style={{ "--delay": "0ms" }}>
+            {/* Avatar */}
+            <div className="relative w-48 mb-10">
               <div
                 className="w-48 h-48 flex items-center justify-center text-6xl select-none"
-                style={{
-                  background: "var(--ink-50)",
-                  border: "1px solid var(--ink-100)",
-                }}>
-                👨‍💻
+                style={{ background: "#F8FAFC", border: "1px solid #E4EDF5" }}>
+                <img
+                  src={foto}
+                  alt="Your Name"
+                  className="w-full h-full object-cover"
+                />
               </div>
-              {/* Offset accent square */}
               <div
                 className="absolute -bottom-3 -right-3 w-12 h-12"
-                style={{ background: "var(--accent)", opacity: 0.15 }}
+                style={{ background: "#2FA4D7", opacity: 0.2 }}
               />
-              {/* Available dot */}
               <div
                 className="absolute -top-2 -right-2 flex items-center gap-1.5 px-2 py-1"
-                style={{
-                  background: "var(--ink-50)",
-                  border: "1px solid var(--ink-100)",
-                }}>
+                style={{ background: "#FFFFFF", border: "1px solid #E4EDF5" }}>
                 <span
                   className="w-1.5 h-1.5 rounded-full"
-                  style={{ background: "var(--accent)" }}
+                  style={{ background: "#22c55e" }}
                 />
                 <span
                   className="font-mono text-xs"
-                  style={{ color: "var(--ink-400)" }}>
+                  style={{ color: "#8BA8C4" }}>
                   Open
                 </span>
               </div>
             </div>
 
-            {/* Info list */}
             <div className="space-y-4 mb-8">
               {[
                 { icon: MapPin, text: personal.location },
                 { icon: Mail, text: personal.email },
               ].map(({ icon: Icon, text }) => (
                 <div key={text} className="flex items-center gap-3">
-                  <Icon size={13} style={{ color: "var(--accent)" }} />
+                  <Icon size={13} style={{ color: "#2FA4D7" }} />
                   <span
                     className="font-mono text-xs"
-                    style={{ color: "var(--ink-400)" }}>
+                    style={{ color: "#8BA8C4" }}>
                     {text}
                   </span>
                 </div>
               ))}
             </div>
 
-            {/* Links */}
             <div className="flex flex-col gap-2">
               {[
                 {
@@ -99,68 +90,61 @@ export default function About() {
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-3 font-mono text-xs tracking-wider uppercase link-underline transition-colors"
-                  style={{ color: "var(--ink-400)", width: "fit-content" }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.color = "var(--accent)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.color = "var(--ink-400)";
-                  }}>
+                  style={{ color: "#6A8FAE", width: "fit-content" }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.color = "#2FA4D7")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.color = "#6A8FAE")
+                  }>
                   <Icon size={12} /> {label}
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Right */}
           <div ref={r} className="reveal md:col-span-3 space-y-8">
             <p
-              className="text-lg leading-relaxed font-light"
-              style={{ color: "var(--ink-500)", fontSize: "1.15rem" }}>
+              className="font-light leading-relaxed"
+              style={{ color: "#0D1B2A", fontSize: "1.15rem" }}>
               {personal.bio}
             </p>
-            <p className="leading-relaxed" style={{ color: "var(--ink-400)" }}>
+            <p className="leading-relaxed" style={{ color: "#4A6E8E" }}>
               {personal.bioExtended}
             </p>
 
-            {/* Code block */}
+            {/* Code block on navy */}
             <div
               className="p-6 font-mono text-xs leading-loose"
               style={{
-                background: "var(--ink-50)",
-                borderLeft: "2px solid var(--accent)",
+                background: "#0D1B2A",
+                borderLeft: "3px solid #2FA4D7",
               }}>
-              <div style={{ color: "var(--ink-300)" }}>
-                {"// identity.config.ts"}
-              </div>
+              <div style={{ color: "#8BA8C4" }}>{"// identity.config.ts"}</div>
               <div className="mt-2">
-                <span style={{ color: "var(--ink-400)" }}>export const </span>
-                <span style={{ color: "var(--ink)" }}>developer</span>
-                <span style={{ color: "var(--ink-400)" }}> = {"{"}</span>
+                <span style={{ color: "#8BA8C4" }}>export const </span>
+                <span style={{ color: "#FFFFFF" }}>developer</span>
+                <span style={{ color: "#8BA8C4" }}> = {"{"}</span>
               </div>
-              <div className="pl-4">
-                <span style={{ color: "var(--accent)" }}>name</span>
-                <span style={{ color: "var(--ink-400)" }}>: </span>
-                <span style={{ color: "var(--ink-500)" }}>
-                  "{personal.name}"
-                </span>
-                <span style={{ color: "var(--ink-300)" }}>,</span>
-              </div>
-              <div className="pl-4">
-                <span style={{ color: "var(--accent)" }}>role</span>
-                <span style={{ color: "var(--ink-400)" }}>: </span>
-                <span style={{ color: "var(--ink-500)" }}>
-                  "{personal.role}"
-                </span>
-                <span style={{ color: "var(--ink-300)" }}>,</span>
-              </div>
-              <div className="pl-4">
-                <span style={{ color: "var(--accent)" }}>available</span>
-                <span style={{ color: "var(--ink-400)" }}>: </span>
-                <span style={{ color: "#22c55e" }}>true</span>
-                <span style={{ color: "var(--ink-300)" }}>,</span>
-              </div>
-              <div style={{ color: "var(--ink-400)" }}>{"}"}</div>
+              {[
+                ["name", `"${personal.name}"`],
+                ["role", `"${personal.role}"`],
+                ["available", "true"],
+              ].map(([k, v]) => (
+                <div key={k} className="pl-4">
+                  <span style={{ color: "#2FA4D7" }}>{k}</span>
+                  <span style={{ color: "#8BA8C4" }}>: </span>
+                  <span
+                    style={{
+                      color:
+                        k === "available" ? "#22c55e" : "rgba(248,250,252,0.7)",
+                    }}>
+                    {v}
+                  </span>
+                  <span style={{ color: "rgba(139,168,196,0.3)" }}>,</span>
+                </div>
+              ))}
+              <div style={{ color: "#8BA8C4" }}>{"}"}</div>
             </div>
           </div>
         </div>

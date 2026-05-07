@@ -1,252 +1,405 @@
 import { useState } from "react";
-import { useScrollAnimation } from "../hooks/useScrollAnimation";
+import emailjs from "@emailjs/browser";
+import { useReveal } from "../hooks/useReveal";
 import { personal } from "../data/portfolio";
-import {
-  FiMail,
-  FiMapPin,
-  FiSend,
-  FiGithub,
-  FiLinkedin,
-  FiTwitter,
-} from "react-icons/fi";
+import { MapPin, Mail, Send, Github, Linkedin, Twitter } from "lucide-react";
+
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+const INITIAL_FORM = {
+  name: "",
+  email: "",
+  subject: "",
+  message: "",
+};
+
+const FORM_FIELDS = [
+  {
+    name: "subject",
+    label: "Subject",
+    placeholder: "Project inquiry...",
+    type: "text",
+  },
+  {
+    name: "message",
+    label: "Message",
+    placeholder: "Tell me about your project...",
+    rows: 5,
+  },
+];
+
+const inputStyle = {
+  borderBottom: "1px solid #E4EDF5",
+  color: "#0D1B2A",
+};
+
+const cardStyle = {
+  background: "#F8FAFC",
+  border: "1px solid #E4EDF5",
+};
+
+const hoverCard = {
+  enter: (e) => {
+    e.currentTarget.style.borderColor = "#2FA4D7";
+    e.currentTarget.style.background = "rgba(47,164,215,0.04)";
+  },
+  leave: (e) => {
+    e.currentTarget.style.borderColor = "#E4EDF5";
+    e.currentTarget.style.background = "#F8FAFC";
+  },
+};
+
+const hoverSocial = {
+  enter: (e) => {
+    e.currentTarget.style.borderColor = "#2FA4D7";
+    e.currentTarget.style.color = "#2FA4D7";
+    e.currentTarget.style.background = "rgba(47,164,215,0.06)";
+  },
+  leave: (e) => {
+    e.currentTarget.style.borderColor = "#E4EDF5";
+    e.currentTarget.style.color = "#8BA8C4";
+    e.currentTarget.style.background = "#F8FAFC";
+  },
+};
+
+function MonoLabel({ children }) {
+  return (
+    <p
+      className="font-mono text-xs uppercase tracking-widest mb-1"
+      style={{ color: "#8BA8C4" }}>
+      {children}
+    </p>
+  );
+}
+
+function InputField({ field, value, onChange }) {
+  return (
+    <div>
+      <MonoLabel>{field.label}</MonoLabel>
+
+      <input
+        type={field.type}
+        name={field.name}
+        value={value}
+        onChange={onChange}
+        required
+        placeholder={field.placeholder}
+        className="w-full bg-transparent outline-none text-sm font-sans pb-2 transition-colors"
+        style={inputStyle}
+        onFocus={(e) => (e.target.style.borderColor = "#2FA4D7")}
+        onBlur={(e) => (e.target.style.borderColor = "#E4EDF5")}
+      />
+    </div>
+  );
+}
+
+function TextareaField({ field, value, onChange }) {
+  return (
+    <div>
+      <MonoLabel>{field.label}</MonoLabel>
+
+      <textarea
+        name={field.name}
+        value={value}
+        onChange={onChange}
+        required
+        rows={field.rows}
+        placeholder={field.placeholder}
+        className="w-full bg-transparent outline-none text-sm font-sans resize-none pt-1 transition-colors"
+        style={inputStyle}
+        onFocus={(e) => (e.target.style.borderColor = "#2FA4D7")}
+        onBlur={(e) => (e.target.style.borderColor = "#E4EDF5")}
+      />
+    </div>
+  );
+}
+
+function SubmitButton({ status }) {
+  const isDisabled = status === "sending" || status === "sent";
+
+  return (
+    <button
+      type="submit"
+      disabled={isDisabled}
+      className="w-full flex items-center justify-center gap-2 py-3.5 font-mono text-xs tracking-widest uppercase transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+      style={{
+        background: "#0D1B2A",
+        color: "#FFFFFF",
+      }}
+      onMouseEnter={(e) => {
+        if (!isDisabled) {
+          e.currentTarget.style.background = "#2FA4D7";
+        }
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.background = "#0D1B2A";
+      }}>
+      {status === "sending" ? (
+        <>
+          <span className="w-3 h-3 border border-white/30 border-t-white rounded-full animate-spin" />
+          Sending...
+        </>
+      ) : status === "sent" ? (
+        "✓ Message Sent"
+      ) : (
+        <>
+          <Send size={12} />
+          Send Message
+        </>
+      )}
+    </button>
+  );
+}
 
 export default function Contact() {
-  const headerRef = useScrollAnimation();
-  const formRef = useScrollAnimation();
-  const infoRef = useScrollAnimation();
+  const headingRef = useReveal();
+  const leftRef = useReveal();
+  const rightRef = useReveal();
 
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
-  const [status, setStatus] = useState(null); // 'sending' | 'sent' | 'error'
+  const [form, setForm] = useState(INITIAL_FORM);
+  const [status, setStatus] = useState(null);
+  const [errMsg, setErrMsg] = useState("");
 
-  const handleChange = (e) =>
-    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+  const contactInfo = [
+    {
+      icon: Mail,
+      label: "Email",
+      value: personal.email,
+      href: `mailto:${personal.email}`,
+    },
+    {
+      icon: MapPin,
+      label: "Location",
+      value: personal.location,
+    },
+  ];
 
-  const handleSubmit = (e) => {
+  const socialLinks = [
+    {
+      icon: Github,
+      href: `https://github.com/${personal.github}`,
+    },
+    {
+      icon: Linkedin,
+      href: `https://linkedin.com/in/${personal.linkedin}`,
+    },
+    {
+      icon: Twitter,
+      href: `https://twitter.com/${personal.twitter}`,
+    },
+  ];
+
+  const handleChange = (e) => {
+    setForm((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     setStatus("sending");
-    // TODO: Integrate with your backend / EmailJS / Resend
-    setTimeout(() => {
+    setErrMsg("");
+
+    try {
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          from_name: form.name,
+          from_email: form.email,
+          subject: form.subject,
+          message: form.message,
+        },
+        EMAILJS_PUBLIC_KEY,
+      );
+
       setStatus("sent");
-      setForm({ name: "", email: "", subject: "", message: "" });
-    }, 1500);
+      setForm(INITIAL_FORM);
+    } catch (error) {
+      console.error(error);
+
+      setStatus("error");
+      setErrMsg("Gagal mengirim pesan, coba lagi.");
+    }
   };
 
   return (
-    <section id="contact" className="py-28 relative">
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent" />
-      <div className="absolute left-1/3 bottom-20 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
+    <section id="contact" className="py-32" style={{ background: "#FFFFFF" }}>
+      <div className="max-w-6xl mx-auto px-8">
+        {/* Heading */}
+        <div ref={headingRef} className="reveal flex items-center gap-6 mb-20">
+          <span className="section-num">06</span>
 
-      <div className="max-w-6xl mx-auto px-6">
-        {/* Header */}
-        <div ref={headerRef} className="fade-in mb-16 text-center">
-          <p className="font-mono text-cyan-400 text-sm mb-2 tracking-widest">
-            06. CONTACT
-          </p>
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-white mb-4">
-            Get In <span className="neon-text-cyan">Touch</span>
+          <div className="rule flex-1" />
+
+          <h2
+            className="font-display text-3xl font-semibold"
+            style={{ color: "#0D1B2A" }}>
+            Contact
           </h2>
-          <div className="w-16 h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent mx-auto mb-6" />
-          <p className="text-slate-400 max-w-lg mx-auto">
-            Have a project in mind? Looking for a backend/fullstack developer?
-            I'm always open to discussing new opportunities and interesting
-            challenges.
-          </p>
         </div>
 
-        <div className="grid md:grid-cols-5 gap-8">
-          {/* Info panel */}
-          <div ref={infoRef} className="fade-in md:col-span-2 space-y-6">
-            {/* Contact info cards */}
-            {[
-              {
-                icon: FiMail,
-                label: "Email",
-                value: personal.email,
-                href: `mailto:${personal.email}`,
-              },
-              {
-                icon: FiMapPin,
-                label: "Location",
-                value: personal.location,
-                href: null,
-              },
-            ].map((item) => (
+        <div className="grid md:grid-cols-5 gap-12">
+          {/* Left Panel */}
+          <div ref={leftRef} className="reveal-left md:col-span-2 space-y-6">
+            <p
+              className="text-base leading-relaxed font-light"
+              style={{ color: "#4A6E8E" }}>
+              Open to discussing new opportunities, interesting challenges, and
+              collaborative projects.
+            </p>
+
+            {/* Contact Cards */}
+            {contactInfo.map((item) => (
               <div
                 key={item.label}
-                className="glass border border-white/5 rounded-xl p-5
-                            hover:border-cyan-500/30 transition-all group">
+                className="p-5 transition-all"
+                style={cardStyle}
+                onMouseEnter={hoverCard.enter}
+                onMouseLeave={hoverCard.leave}>
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
-                    <item.icon className="text-cyan-400" />
+                  <div
+                    className="p-2.5"
+                    style={{
+                      background: "rgba(47,164,215,0.1)",
+                      border: "1px solid rgba(47,164,215,0.2)",
+                    }}>
+                    <item.icon size={13} style={{ color: "#2FA4D7" }} />
                   </div>
+
                   <div>
-                    <p className="font-mono text-xs text-slate-600 mb-1">
-                      {item.label}
-                    </p>
+                    <MonoLabel>{item.label}</MonoLabel>
+
                     {item.href ? (
                       <a
                         href={item.href}
-                        className="text-slate-300 hover:text-cyan-400 transition-colors text-sm">
+                        className="text-sm transition-colors"
+                        style={{ color: "#0D1B2A" }}
+                        onMouseEnter={(e) =>
+                          (e.currentTarget.style.color = "#2FA4D7")
+                        }
+                        onMouseLeave={(e) =>
+                          (e.currentTarget.style.color = "#0D1B2A")
+                        }>
                         {item.value}
                       </a>
                     ) : (
-                      <p className="text-slate-300 text-sm">{item.value}</p>
+                      <p className="text-sm" style={{ color: "#0D1B2A" }}>
+                        {item.value}
+                      </p>
                     )}
                   </div>
                 </div>
               </div>
             ))}
 
-            {/* Social links */}
-            <div className="glass border border-white/5 rounded-xl p-5">
-              <p className="font-mono text-xs text-slate-600 mb-4">
-                // FIND ME ONLINE
-              </p>
-              <div className="flex gap-3">
-                {[
-                  {
-                    icon: FiGithub,
-                    href: `https://github.com/${personal.github}`,
-                    label: "GitHub",
-                  },
-                  {
-                    icon: FiLinkedin,
-                    href: `https://linkedin.com/in/${personal.linkedin}`,
-                    label: "LinkedIn",
-                  },
-                  {
-                    icon: FiTwitter,
-                    href: `https://twitter.com/${personal.twitter}`,
-                    label: "Twitter",
-                  },
-                ].map((s) => (
+            {/* Social Links */}
+            <div>
+              <MonoLabel>Online</MonoLabel>
+
+              <div className="flex gap-3 mt-3">
+                {socialLinks.map(({ icon: Icon, href }, index) => (
                   <a
-                    key={s.label}
-                    href={s.href}
+                    key={index}
+                    href={href}
                     target="_blank"
                     rel="noreferrer"
-                    title={s.label}
-                    className="p-3 glass border border-white/5 rounded-lg text-slate-500 hover:text-cyan-400
-                               hover:border-cyan-500/40 transition-all hover:shadow-[0_0_15px_rgba(0,245,255,0.2)]">
-                    <s.icon size={18} />
+                    className="p-3 transition-all"
+                    style={{
+                      border: "1px solid #E4EDF5",
+                      color: "#8BA8C4",
+                      background: "#F8FAFC",
+                    }}
+                    onMouseEnter={hoverSocial.enter}
+                    onMouseLeave={hoverSocial.leave}>
+                    <Icon size={15} />
                   </a>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* Contact Form */}
-          <div ref={formRef} className="fade-in md:col-span-3">
-            <div className="gradient-border rounded-xl">
-              <div className="glass rounded-xl p-6">
-                <p className="font-mono text-xs text-slate-600 mb-6">
-                  // SEND_MESSAGE.exe
-                </p>
+          {/* Right Panel */}
+          <div ref={rightRef} className="reveal md:col-span-3">
+            <div className="px-6 py-4" style={{ background: "#0D1B2A" }}>
+              <p className="font-mono text-xs" style={{ color: "#8BA8C4" }}>
+                {"// send_message.init()"}
+              </p>
+            </div>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="font-mono text-xs text-slate-500 mb-1 block">
-                        YOUR_NAME
-                      </label>
-                      <input
-                        type="text"
-                        name="name"
-                        value={form.name}
-                        onChange={handleChange}
-                        required
-                        placeholder="John Doe"
-                        className="w-full bg-white/3 border border-white/10 rounded-lg px-4 py-3 text-sm text-slate-300
-                                   placeholder-slate-600 font-mono focus:outline-none focus:border-cyan-500/60
-                                   focus:shadow-[0_0_10px_rgba(0,245,255,0.1)] transition-all"
-                      />
-                    </div>
-                    <div>
-                      <label className="font-mono text-xs text-slate-500 mb-1 block">
-                        EMAIL
-                      </label>
-                      <input
-                        type="email"
-                        name="email"
-                        value={form.email}
-                        onChange={handleChange}
-                        required
-                        placeholder="john@example.com"
-                        className="w-full bg-white/3 border border-white/10 rounded-lg px-4 py-3 text-sm text-slate-300
-                                   placeholder-slate-600 font-mono focus:outline-none focus:border-cyan-500/60
-                                   focus:shadow-[0_0_10px_rgba(0,245,255,0.1)] transition-all"
-                      />
-                    </div>
-                  </div>
+            <div
+              className="p-8"
+              style={{
+                border: "1px solid #E4EDF5",
+                borderTop: "none",
+              }}>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Name + Email */}
+                <div className="grid md:grid-cols-2 gap-6">
+                  <InputField
+                    field={{
+                      name: "name",
+                      label: "Name",
+                      placeholder: "Name",
+                      type: "text",
+                    }}
+                    value={form.name}
+                    onChange={handleChange}
+                  />
 
-                  <div>
-                    <label className="font-mono text-xs text-slate-500 mb-1 block">
-                      SUBJECT
-                    </label>
-                    <input
-                      type="text"
-                      name="subject"
-                      value={form.subject}
+                  <InputField
+                    field={{
+                      name: "email",
+                      label: "Email",
+                      placeholder: "name@email.com",
+                      type: "email",
+                    }}
+                    value={form.email}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                {/* Dynamic Fields */}
+                {FORM_FIELDS.map((field) =>
+                  field.rows ? (
+                    <TextareaField
+                      key={field.name}
+                      field={field}
+                      value={form[field.name]}
                       onChange={handleChange}
-                      required
-                      placeholder="Project inquiry..."
-                      className="w-full bg-white/3 border border-white/10 rounded-lg px-4 py-3 text-sm text-slate-300
-                                 placeholder-slate-600 font-mono focus:outline-none focus:border-cyan-500/60
-                                 focus:shadow-[0_0_10px_rgba(0,245,255,0.1)] transition-all"
                     />
-                  </div>
-
-                  <div>
-                    <label className="font-mono text-xs text-slate-500 mb-1 block">
-                      MESSAGE
-                    </label>
-                    <textarea
-                      name="message"
-                      value={form.message}
+                  ) : (
+                    <InputField
+                      key={field.name}
+                      field={field}
+                      value={form[field.name]}
                       onChange={handleChange}
-                      required
-                      rows={5}
-                      placeholder="Tell me about your project..."
-                      className="w-full bg-white/3 border border-white/10 rounded-lg px-4 py-3 text-sm text-slate-300
-                                 placeholder-slate-600 font-mono focus:outline-none focus:border-cyan-500/60
-                                 focus:shadow-[0_0_10px_rgba(0,245,255,0.1)] transition-all resize-none"
                     />
-                  </div>
+                  ),
+                )}
 
-                  <button
-                    type="submit"
-                    disabled={status === "sending" || status === "sent"}
-                    className="w-full flex items-center justify-center gap-2 py-3 px-6 font-mono text-sm font-semibold
-                               bg-cyan-500 hover:bg-cyan-400 text-dark-900 rounded-lg transition-all
-                               hover:shadow-[0_0_30px_rgba(0,245,255,0.4)] active:scale-[0.98]
-                               disabled:opacity-60 disabled:cursor-not-allowed"
-                    style={{ color: "#030712" }}>
-                    {status === "sending" && (
-                      <span className="w-4 h-4 border-2 border-dark-900/30 border-t-dark-900 rounded-full animate-spin" />
-                    )}
-                    {status === "sent" ? (
-                      "✓ Message Sent!"
-                    ) : status === "sending" ? (
-                      "Sending..."
-                    ) : (
-                      <>
-                        <FiSend /> Send Message
-                      </>
-                    )}
-                  </button>
+                <SubmitButton status={status} />
 
-                  {status === "sent" && (
-                    <p className="font-mono text-xs text-green-400 text-center">
-                      // Thanks! I'll get back to you soon.
-                    </p>
-                  )}
-                </form>
-              </div>
+                {status === "sent" && (
+                  <p
+                    className="font-mono text-xs text-center"
+                    style={{ color: "#22c55e" }}>
+                    // Message received — I'll be in touch soon.
+                  </p>
+                )}
+
+                {status === "error" && (
+                  <p
+                    className="font-mono text-xs text-center"
+                    style={{ color: "#ef4444" }}>
+                    // Error: {errMsg}
+                  </p>
+                )}
+              </form>
             </div>
           </div>
         </div>

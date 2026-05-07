@@ -1,6 +1,6 @@
 # Portfolio — Minimal Tech / Futuristic Minimalism
 
-A clean, minimal, and production-ready personal portfolio built with **React + Vite + Tailwind CSS**. Designed with a *Minimal Tech* aesthetic — light background, precise typography, single orange accent, and intentional whitespace.
+A clean, minimal, and production-ready personal portfolio built with **React + Vite + Tailwind CSS**. Designed with a _Minimal Tech_ aesthetic — light background, precise typography, single orange accent, and intentional whitespace.
 
 ---
 
@@ -14,17 +14,19 @@ A clean, minimal, and production-ready personal portfolio built with **React + V
 ## ✦ Features
 
 ### Sections
-| # | Section | Description |
-|---|---------|-------------|
-| 01 | **Hero** | Editorial large type, multi-role typing effect, stats grid, scrolling tech marquee, CTA buttons |
-| 02 | **About** | Bio, avatar, contact info, decorative code block, links to GitHub / LinkedIn / Résumé |
-| 03 | **Skills** | Grid per category (Backend, Mobile, Frontend, Infrastructure) + "also familiar with" tags |
-| 04 | **Projects** | Featured projects in row layout, compact grid for others, filter by type |
-| 05 | **Experience** | Work & education timeline with tech stack tags per entry |
-| 06 | **GitHub Stats** | Live stats card, top languages, streak, activity graph — powered by `github-readme-stats` (no API key needed) |
-| 07 | **Contact** | Minimal form (name, email, subject, message) + social links |
+
+| #   | Section          | Description                                                                                                   |
+| --- | ---------------- | ------------------------------------------------------------------------------------------------------------- |
+| 01  | **Hero**         | Editorial large type, multi-role typing effect, stats grid, scrolling tech marquee, CTA buttons               |
+| 02  | **About**        | Bio, avatar, contact info, decorative code block, links to GitHub / LinkedIn / Résumé                         |
+| 03  | **Skills**       | Grid per category (Backend, Mobile, Frontend, Infrastructure) + "also familiar with" tags                     |
+| 04  | **Projects**     | Featured projects in row layout, compact grid for others, filter by type                                      |
+| 05  | **Experience**   | Work & education timeline with tech stack tags per entry                                                      |
+| 06  | **GitHub Stats** | Live stats card, top languages, streak, activity graph — powered by `github-readme-stats` (no API key needed) |
+| 07  | **Contact**      | Minimal form (name, email, subject, message) + social links                                                   |
 
 ### UI / Design
+
 - **Custom cursor** — small red dot + expanding ring on hover
 - **Scroll reveal** — fade-up & slide-left animations via `IntersectionObserver`
 - **Typing effect** — multi-role typewriter with delete animation in Hero
@@ -35,6 +37,7 @@ A clean, minimal, and production-ready personal portfolio built with **React + V
 - **2px custom scrollbar**
 
 ### Navbar
+
 - Sticky top bar with backdrop blur
 - Active section detection on scroll
 - Mobile hamburger menu with collapse animation
@@ -44,14 +47,14 @@ A clean, minimal, and production-ready personal portfolio built with **React + V
 
 ## ✦ Tech Stack
 
-| Category | Library / Tool |
-|----------|---------------|
-| Framework | React 19 + Vite 8 |
-| Styling | Tailwind CSS 3 + PostCSS |
-| Icons | Lucide React, React Icons |
-| Routing | React Router DOM 7 |
-| Animation | GSAP 3, Lenis (smooth scroll) |
-| Markdown | React Markdown |
+| Category     | Library / Tool                                                            |
+| ------------ | ------------------------------------------------------------------------- |
+| Framework    | React 19 + Vite 8                                                         |
+| Styling      | Tailwind CSS 3 + PostCSS                                                  |
+| Icons        | Lucide React, React Icons                                                 |
+| Routing      | React Router DOM 7                                                        |
+| Animation    | GSAP 3, Lenis (smooth scroll)                                             |
+| Markdown     | React Markdown                                                            |
 | GitHub Stats | [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) |
 
 ---
@@ -94,6 +97,7 @@ portfolio/
 ## ✦ Getting Started
 
 ### Prerequisites
+
 - Node.js `>=18.x`
 - npm `>=9.x`
 
@@ -139,23 +143,23 @@ export const personal = {
   role: "Your Role",
   location: "Your City, Country",
   email: "you@example.com",
-  github: "your-github-username",   // Used for GitHub Stats
+  github: "your-github-username", // Used for GitHub Stats
   linkedin: "your-linkedin",
   twitter: "your-twitter",
   bio: "Your bio...",
   resumeUrl: "/resume.pdf",
-}
+};
 ```
 
 Edit the following exports to personalize your portfolio:
 
-| Export | Description |
-|--------|-------------|
-| `personal` | Name, role, bio, social links, location |
-| `stats` | Hero stats (years, projects, users, etc.) |
-| `skills` | Skill categories and items |
-| `projects` | Project list with tags, links, featured flag |
-| `experience` | Work and education timeline entries |
+| Export       | Description                                  |
+| ------------ | -------------------------------------------- |
+| `personal`   | Name, role, bio, social links, location      |
+| `stats`      | Hero stats (years, projects, users, etc.)    |
+| `skills`     | Skill categories and items                   |
+| `projects`   | Project list with tags, links, featured flag |
+| `experience` | Work and education timeline entries          |
 
 ### GitHub Stats
 
@@ -173,12 +177,12 @@ The contact form in `Contact.jsx` is UI-only by default. To make it functional, 
 
 ## ✦ Available Scripts
 
-| Script | Description |
-|--------|-------------|
-| `npm run dev` | Start development server on `0.0.0.0:5173` |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview production build |
-| `npm run check` | Build + audit dependencies |
+| Script            | Description                                |
+| ----------------- | ------------------------------------------ |
+| `npm run dev`     | Start development server on `0.0.0.0:5173` |
+| `npm run build`   | Build for production                       |
+| `npm run preview` | Preview production build                   |
+| `npm run check`   | Build + audit dependencies                 |
 
 ---
 
