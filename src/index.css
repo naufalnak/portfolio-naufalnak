@@ -2,37 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* Brand palette */
-  --navy: #0d1b2a;
-  --navy-80: rgba(13, 27, 42, 0.8);
-  --navy-10: rgba(13, 27, 42, 0.06);
-  --sky: #2fa4d7;
-  --sky-dim: rgba(47, 164, 215, 0.1);
-  --sky-mid: rgba(47, 164, 215, 0.2);
-  --white: #ffffff;
-  --cloud: #f8fafc;
-  --mist: #8ba8c4;
-  --mist-light: rgba(139, 168, 196, 0.18);
-
-  /* Semantic aliases (used throughout components) */
-  --ink: var(--navy);
-  --ink-50: var(--cloud);
-  --ink-100: #e4edf5; /* slightly blue-tinted rule lines */
-  --ink-200: #c8d9e8;
-  --ink-300: var(--mist);
-  --ink-400: #6a8fae;
-  --ink-500: #4a6e8e;
-  --ink-600: #2a4e6e;
-  --ink-700: var(--navy);
-  --ink-800: var(--navy);
-  --ink-900: var(--navy);
-
-  --accent: var(--sky);
-  --accent-dim: var(--sky-dim);
-  --accent-mid: var(--sky-mid);
-}
-
 * {
   margin: 0;
   padding: 0;
@@ -44,175 +13,13 @@ html {
 }
 
 body {
-  background: var(--cloud);
-  color: var(--navy);
+  background: #fafaf8;
+  color: #0a0a0a;
   font-family: "DM Sans", sans-serif;
-  font-weight: 300;
   overflow-x: hidden;
-  cursor: none;
 }
 
-/* Custom cursor */
-.cursor {
-  position: fixed;
-  width: 8px;
-  height: 8px;
-  background: var(--sky);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  transition: transform 0.15s ease;
-}
-.cursor-ring {
-  position: fixed;
-  width: 32px;
-  height: 32px;
-  border: 1px solid var(--mist);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9998;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.cursor-ring.hover {
-  width: 48px;
-  height: 48px;
-  border-color: var(--sky);
-  background: var(--sky-dim);
-}
-
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 2px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: var(--ink-200);
-}
-
-/* Reveal animations */
-.reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition:
-    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-.reveal-left {
-  opacity: 0;
-  transform: translateX(-32px);
-  transition:
-    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.reveal-left.visible {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* Section number accent */
-.section-num {
-  font-family: "DM Mono", monospace;
-  font-size: 0.65rem;
-  color: var(--accent);
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-}
-
-/* Thin horizontal rule */
-.rule {
-  height: 1px;
-  background: var(--ink-100);
-}
-
-/* Tag pill */
-.tag {
-  font-family: "DM Mono", monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.08em;
-  padding: 0.2rem 0.6rem;
-  border: 1px solid var(--ink-100);
-  color: var(--ink-400);
-  transition: all 0.2s;
-  display: inline-block;
-}
-.tag:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: var(--accent-dim);
-}
-
-/* Progress bar */
-.bar-track {
-  height: 1px;
-  background: var(--ink-100);
-  position: relative;
-  overflow: visible;
-}
-.bar-fill {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 1px;
-  background: var(--ink);
-  transition: width 1.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.bar-fill::after {
-  content: "";
-  position: absolute;
-  right: -2px;
-  top: -2px;
-  width: 5px;
-  height: 5px;
-  background: var(--accent);
-  border-radius: 50%;
-}
-
-/* Animated underline on hover */
-.link-underline {
-  position: relative;
-  text-decoration: none;
-}
-.link-underline::after {
-  content: "";
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 1px;
-  background: var(--accent);
-  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.link-underline:hover::after {
-  width: 100%;
-}
-
-/* Input */
-.input-minimal {
-  width: 100%;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid var(--ink-200);
-  padding: 0.75rem 0;
-  font-family: "DM Sans", sans-serif;
-  font-size: 0.875rem;
-  color: var(--ink);
-  outline: none;
-  transition: border-color 0.2s;
-}
-.input-minimal:focus {
-  border-color: var(--ink);
-}
-.input-minimal::placeholder {
-  color: var(--ink-300);
-}
-
-/* Noise texture overlay */
+/* Noise texture */
 body::before {
   content: "";
   position: fixed;
@@ -223,7 +30,18 @@ body::before {
   opacity: 0.4;
 }
 
-/* Marquee */
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 2px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+}
+
+/* Marquee — dipakai di Hero ticker */
 @keyframes marquee {
   from {
     transform: translateX(0);
@@ -231,24 +49,4 @@ body::before {
   to {
     transform: translateX(-50%);
   }
-}
-.marquee-track {
-  animation: marquee 18s linear infinite;
-  white-space: nowrap;
-}
-
-/* Number counter style */
-.counter {
-  font-family: "Syne", sans-serif;
-  font-weight: 700;
-}
-
-/* Accent dot */
-.dot-accent {
-  display: inline-block;
-  width: 5px;
-  height: 5px;
-  background: var(--accent);
-  border-radius: 50%;
-  vertical-align: middle;
 }

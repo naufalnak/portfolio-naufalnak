@@ -6,182 +6,236 @@ const links = [
   { id: "skills", label: "Skills" },
   { id: "projects", label: "Work" },
   { id: "experience", label: "Experience" },
-  { id: "github", label: "GitHub" },
   { id: "contact", label: "Contact" },
 ];
 
+/* ─── inline styles ─── */
+const S = {
+  header: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 50,
+    background: "#0a0a0a",
+    borderBottom: "3px solid #0a0a0a",
+    fontFamily: "'DM Mono', 'Fira Mono', monospace",
+  },
+  inner: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    height: 56,
+    padding: "0 48px",
+  },
+  logo: {
+    fontFamily: "'Barlow Condensed', 'Arial Narrow', sans-serif",
+    fontSize: 20,
+    fontWeight: 900,
+    color: "#f0ee42",
+    letterSpacing: "0.12em",
+    textDecoration: "none",
+  },
+  navLinks: { display: "flex", alignItems: "center", gap: 0 },
+  navLink: (active) => ({
+    fontFamily: "'DM Mono', monospace",
+    fontSize: 11,
+    letterSpacing: "0.18em",
+    textTransform: "uppercase",
+    textDecoration: "none",
+    height: 56,
+    display: "flex",
+    alignItems: "center",
+    padding: "0 20px",
+    borderLeft: "1px solid #1a1a1a",
+    color: active ? "#f0ee42" : "#666",
+    background: active ? "#111" : "transparent",
+    transition: "color 0.18s, background 0.18s",
+  }),
+  badge: {
+    background: "#f0ee42",
+    color: "#0a0a0a",
+    fontFamily: "'DM Mono', monospace",
+    fontSize: 10,
+    fontWeight: 700,
+    letterSpacing: "0.12em",
+    textTransform: "uppercase",
+    padding: "7px 16px",
+    borderLeft: "1px solid #1a1a1a",
+    whiteSpace: "nowrap",
+    display: "flex",
+    alignItems: "center",
+    gap: 7,
+    height: 56,
+  },
+  availDot: {
+    width: 7,
+    height: 7,
+    borderRadius: "50%",
+    background: "#5adb8a",
+    animation: "nbPulse 2s ease-in-out infinite",
+  },
+
+  /* mobile burger */
+  burger: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 5,
+    background: "none",
+    border: "none",
+    cursor: "pointer",
+    padding: 4,
+  },
+  burgerLine: (open, i) => ({
+    display: "block",
+    width: 22,
+    height: 2,
+    background: "#f0ee42",
+    transition: "transform 0.2s, opacity 0.2s",
+    transform:
+      i === 0 && open
+        ? "rotate(45deg) translateY(7px)"
+        : i === 2 && open
+          ? "rotate(-45deg) translateY(-7px)"
+          : "none",
+    opacity: i === 1 && open ? 0 : 1,
+  }),
+
+  /* mobile drawer */
+  drawer: (open) => ({
+    overflow: "hidden",
+    maxHeight: open ? 400 : 0,
+    transition: "max-height 0.3s ease",
+    background: "#0a0a0a",
+    borderTop: open ? "2px solid #1a1a1a" : "none",
+  }),
+  drawerInner: {
+    padding: "20px 28px 28px",
+    display: "flex",
+    flexDirection: "column",
+    gap: 0,
+  },
+  drawerLink: (active) => ({
+    fontFamily: "'DM Mono', monospace",
+    fontSize: 12,
+    letterSpacing: "0.2em",
+    textTransform: "uppercase",
+    textDecoration: "none",
+    color: active ? "#f0ee42" : "#555",
+    borderBottom: "1px solid #1a1a1a",
+    padding: "14px 0",
+    transition: "color 0.15s",
+  }),
+  drawerBadge: {
+    marginTop: 16,
+    background: "#f0ee42",
+    color: "#0a0a0a",
+    fontFamily: "'DM Mono', monospace",
+    fontSize: 11,
+    fontWeight: 700,
+    letterSpacing: "0.12em",
+    textTransform: "uppercase",
+    padding: "12px 20px",
+    display: "flex",
+    alignItems: "center",
+    gap: 8,
+    width: "fit-content",
+  },
+};
+
 export default function Navbar() {
-  const [active, setActive] = useState("home");
-  const [scrolled, setScrolled] = useState(false);
+  const [active, setActive] = useState("hero");
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => {
-      setScrolled(window.scrollY > 40);
       for (let i = links.length - 1; i >= 0; i--) {
         const el = document.getElementById(links[i].id);
-        if (el && window.scrollY >= el.offsetTop - 160) {
+        if (el && window.scrollY >= el.offsetTop - 100) {
           setActive(links[i].id);
-          break;
+          return;
         }
       }
+      setActive("hero");
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  /* inject pulse keyframe once */
+  useEffect(() => {
+    if (document.getElementById("nb-navbar-style")) return;
+    const st = document.createElement("style");
+    st.id = "nb-navbar-style";
+    st.textContent = `
+      @keyframes nbPulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+      @media(max-width:768px){ .nb-desktop{display:none!important} }
+      @media(min-width:769px){ .nb-mobile{display:none!important} }
+    `;
+    document.head.appendChild(st);
+  }, []);
+
   return (
-    <header
-      className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
-      style={{
-        background: "transparent",
-        backdropFilter: "none",
-        WebkitBackdropFilter: "none",
-      }}>
-      <div className="max-w-6xl mx-auto px-8 h-16 flex items-center justify-between">
-        {/* Logo — kiri */}
-        <a href="#home" className="flex items-center gap-2 group flex-shrink-0">
-          <span
-            className="w-2 h-2 rounded-full transition-transform group-hover:scale-125"
-            style={{ background: "#2FA4D7" }}
-          />
-          <span
-            className="font-display font-semibold text-sm tracking-wide"
-            style={{ color: "#FFFFFF" }}>
-            {personal.firstName.toLowerCase()}
-            <span style={{ color: "#2FA4D7" }}>.</span>
-            {personal.lastName.toLowerCase()}
-          </span>
+    <header style={S.header}>
+      {/* ── Desktop bar ── */}
+      <div style={S.inner}>
+        {/* Logo */}
+        <a href="#hero" style={S.logo}>
+          NAK_
         </a>
 
-        {/* Pill nav — tengah (desktop) */}
-        <nav
-          className="hidden md:flex items-center gap-1 absolute left-1/2"
-          style={{
-            transform: "translateX(-50%)",
-            background: "rgba(255,255,255,0.06)",
-            border: "1px solid rgba(139,168,196,0.18)",
-            borderRadius: "999px",
-            padding: "6px 8px",
-            backdropFilter: "blur(10px)",
-            WebkitBackdropFilter: "blur(10px)",
-          }}>
+        {/* Nav links — desktop */}
+        <nav className="nb-desktop" style={S.navLinks}>
           {links.map((link) => (
             <a
               key={link.id}
               href={`#${link.id}`}
-              className="font-mono text-xs tracking-widest uppercase transition-all"
-              style={{
-                padding: "6px 16px",
-                borderRadius: "999px",
-                color: active === link.id ? "#0D1B2A" : "#8BA8C4",
-                background: active === link.id ? "#2FA4D7" : "transparent",
-                whiteSpace: "nowrap",
-              }}
+              style={S.navLink(active === link.id)}
               onMouseEnter={(e) => {
-                if (active !== link.id) e.currentTarget.style.color = "#FFFFFF";
+                if (active !== link.id) e.currentTarget.style.color = "#f0ee42";
               }}
               onMouseLeave={(e) => {
-                if (active !== link.id) e.currentTarget.style.color = "#8BA8C4";
+                if (active !== link.id) e.currentTarget.style.color = "#666";
               }}>
               {link.label}
             </a>
           ))}
         </nav>
 
-        {/* CTA Button — kanan (desktop) */}
-        <a
-          href="#contact"
-          className="hidden md:inline-flex items-center gap-2 font-mono text-xs tracking-widest uppercase transition-all flex-shrink-0"
-          style={{
-            background: "#2FA4D7",
-            color: "#0D1B2A",
-            borderRadius: "999px",
-            padding: "10px 20px",
-            fontWeight: 600,
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = "#FFFFFF";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = "#2FA4D7";
-          }}>
-          Let's Talk
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-            <path
-              d="M2 10L10 2M10 2H4M10 2V8"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </a>
+        {/* Open-to-work badge — desktop */}
+        <div className="nb-desktop" style={S.badge}>
+          <span style={S.availDot} />
+          Open to work
+        </div>
 
         {/* Burger — mobile */}
         <button
-          className="md:hidden flex flex-col gap-1.5 p-1"
-          onClick={() => setMenuOpen((m) => !m)}>
+          className="nb-mobile"
+          style={S.burger}
+          onClick={() => setMenuOpen((v) => !v)}
+          aria-label="Toggle menu">
           {[0, 1, 2].map((i) => (
-            <span
-              key={i}
-              className="block w-5 h-px transition-all"
-              style={{
-                background: "#FFFFFF",
-                transform:
-                  i === 0 && menuOpen
-                    ? "rotate(45deg) translateY(4px)"
-                    : i === 2 && menuOpen
-                      ? "rotate(-45deg) translateY(-4px)"
-                      : "none",
-                opacity: i === 1 && menuOpen ? 0 : 1,
-              }}
-            />
+            <span key={i} style={S.burgerLine(menuOpen, i)} />
           ))}
         </button>
       </div>
 
-      {/* Mobile menu */}
-      <div
-        className="md:hidden overflow-hidden transition-all duration-300"
-        style={{
-          maxHeight: menuOpen ? "400px" : "0",
-          background: "rgba(13,27,42,0.97)",
-          backdropFilter: "blur(12px)",
-        }}>
-        <div className="px-8 py-6 flex flex-col gap-5">
+      {/* ── Mobile drawer ── */}
+      <div className="nb-mobile" style={S.drawer(menuOpen)}>
+        <div style={S.drawerInner}>
           {links.map((link) => (
             <a
               key={link.id}
               href={`#${link.id}`}
-              onClick={() => setMenuOpen(false)}
-              className="font-mono text-xs tracking-widest uppercase"
-              style={{ color: active === link.id ? "#2FA4D7" : "#8BA8C4" }}>
+              style={S.drawerLink(active === link.id)}
+              onClick={() => setMenuOpen(false)}>
               {link.label}
             </a>
           ))}
-          <a
-            href="#contact"
-            onClick={() => setMenuOpen(false)}
-            className="inline-flex items-center gap-2 font-mono text-xs tracking-widest uppercase mt-2"
-            style={{
-              background: "#2FA4D7",
-              color: "#0D1B2A",
-              borderRadius: "999px",
-              padding: "10px 20px",
-              width: "fit-content",
-            }}>
-            Let's Talk
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path
-                d="M2 10L10 2M10 2H4M10 2V8"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </a>
+          <div style={S.drawerBadge}>
+            <span style={S.availDot} />
+            Open to work
+          </div>
         </div>
       </div>
     </header>
