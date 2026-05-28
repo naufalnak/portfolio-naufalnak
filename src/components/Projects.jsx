@@ -6,17 +6,11 @@ const MONO = "'DM Mono','Fira Mono',monospace";
 const COND = "'Barlow Condensed','Arial Narrow',sans-serif";
 const JP = "'Noto Serif JP',serif";
 
-const FILTERS = [
-  "All",
-  "AI / Full Stack",
-  "Backend",
-  "Mobile",
-  "Design",
-  "Education",
-];
+const FILTERS = ["All", "AI", "Full Stack", "Backend", "Mobile", "Design"];
 
 const TYPE_COLOR = {
-  "AI / Full Stack": "#f0ee42",
+  AI: "#f0ee42",
+  "Full Stack": "#E8B86D",
   Backend: "#5adb8a",
   Mobile: "#6eb5ff",
   Design: "#ff6b6b",
@@ -25,9 +19,10 @@ const TYPE_COLOR = {
 
 /* JP label per type */
 const TYPE_JP = {
-  "AI / Full Stack": "全スタック",
-  Backend: "後端",
-  Mobile: "移動体",
+  AI: "人工知能",
+  "Full Stack": "全層開発",
+  Backend: "後端開発",
+  Mobile: "移動開発",
   Design: "設計",
   Education: "教育",
 };

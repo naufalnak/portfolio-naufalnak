@@ -3,6 +3,7 @@ import { personal } from "../data/portfolio";
 
 const MONO = "'DM Mono','Fira Mono',monospace";
 const COND = "'Barlow Condensed','Arial Narrow',sans-serif";
+const JP = "'Noto Serif JP',serif";
 
 const NAV_LINKS = [
   { label: "About", href: "#about" },
@@ -18,20 +19,32 @@ const SOCIAL_LINKS = [
   { label: "Email", href: `mailto:${personal.email}` },
 ];
 
+/* ticker — cukup panjang untuk seamless loop */
 const TICKER_ITEMS = [
   "Node.js",
+  "バックエンド",
   "Kotlin",
-  "Express.js",
-  "PostgreSQL",
-  "Jetpack Compose",
-  "React",
-  "Go",
-  "REST API",
-  "Prisma ORM",
   "Android",
+  "Express.js",
+  "設計",
+  "PostgreSQL",
+  "後端",
+  "Jetpack Compose",
+  "構築",
+  "React",
+  "技術",
+  "REST API",
+  "開発者",
+  "Next.js",
+  "全スタック",
+  "TypeScript",
+  "移動体",
+  "Prisma ORM",
+  "経験",
+  "Git",
+  "作品",
 ];
 
-/* ── breakpoint hook ── */
 function useIsMobile(bp = 768) {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < bp);
   useEffect(() => {
@@ -42,58 +55,103 @@ function useIsMobile(bp = 768) {
   return isMobile;
 }
 
+function NavLink({ label, href, arrow = "▶", external = false, isMobile }) {
+  const [hov, setHov] = useState(false);
+  return (
+    <a
+      href={href}
+      target={external ? "_blank" : undefined}
+      rel={external ? "noreferrer" : undefined}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        fontFamily: MONO,
+        fontSize: isMobile ? 12 : 11,
+        color: hov ? "#f0ee42" : "#555",
+        letterSpacing: ".1em",
+        textTransform: "uppercase",
+        textDecoration: "none",
+        display: "flex",
+        alignItems: "center",
+        gap: hov ? 14 : 8,
+        padding: "5px 0",
+        transition: "color .15s, gap .15s",
+        borderBottom: isMobile ? "1px solid #1a1a1a" : "none",
+      }}>
+      <span style={{ color: "#2a2a2a", fontSize: 9, flexShrink: 0 }}>
+        {arrow}
+      </span>
+      {label}
+    </a>
+  );
+}
+
 export default function Footer() {
   const isMobile = useIsMobile();
   const year = new Date().getFullYear();
   const [topHover, setTopHover] = useState(false);
 
-  /* inject ticker keyframe once */
   useEffect(() => {
     if (document.getElementById("nb-footer-kf")) return;
     const st = document.createElement("style");
     st.id = "nb-footer-kf";
     st.textContent = `
-      @keyframes nbFooterTick { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+      @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap');
+      @keyframes nbFooterTick { from{transform:translateX(0)} to{transform:translateX(-25%)} }
       @keyframes nbPulseF { 0%,100%{opacity:1} 50%{opacity:.25} }
     `;
     document.head.appendChild(st);
   }, []);
 
-  /* ── reusable link row ── */
-  const NavLink = ({ label, href, arrow = "▶", external = false }) => {
-    const [hov, setHov] = useState(false);
-    return (
-      <a
-        href={href}
-        target={external ? "_blank" : undefined}
-        rel={external ? "noreferrer" : undefined}
-        onMouseEnter={() => setHov(true)}
-        onMouseLeave={() => setHov(false)}
+  /* ── available badge ── */
+  const AvailBadge = () => (
+    <div
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 8,
+        padding: "9px 14px",
+        border: "2px solid #1a1a1a",
+        background: "#111",
+        width: "fit-content",
+      }}>
+      <span
+        style={{
+          width: 6,
+          height: 6,
+          borderRadius: "50%",
+          background: "#5adb8a",
+          flexShrink: 0,
+          animation: "nbPulseF 2s ease-in-out infinite",
+        }}
+      />
+      <span
         style={{
           fontFamily: MONO,
-          fontSize: isMobile ? 12 : 11,
-          color: hov ? "#f0ee42" : "#555",
-          letterSpacing: ".1em",
+          fontSize: 9,
+          color: "#5adb8a",
+          letterSpacing: ".18em",
           textTransform: "uppercase",
-          textDecoration: "none",
-          display: "flex",
-          alignItems: "center",
-          gap: hov ? 14 : 8,
-          padding: "5px 0",
-          transition: "color .15s, gap .15s",
-          borderBottom: isMobile ? "1px solid #1a1a1a" : "none",
+          fontWeight: 500,
         }}>
-        <span style={{ color: "#2a2a2a", fontSize: 9, flexShrink: 0 }}>
-          {arrow}
-        </span>
-        {label}
-      </a>
-    );
-  };
+        Open to work
+      </span>
+      {/* JP translation */}
+      <span
+        style={{
+          fontFamily: JP,
+          fontSize: 8,
+          color: "rgba(90,219,138,.4)",
+          letterSpacing: ".04em",
+        }}>
+        求職中
+      </span>
+    </div>
+  );
 
   return (
     <footer style={{ background: "#0a0a0a", borderTop: "3px solid #1a1a1a" }}>
-      {/* ══ DESKTOP: 3 kolom ══ */}
+      {/* ══ DESKTOP: 3 col ══ */}
       {!isMobile && (
         <div
           style={{
@@ -106,9 +164,10 @@ export default function Footer() {
           {/* col 1 — brand */}
           <div
             style={{ borderRight: "3px solid #1a1a1a", padding: "40px 40px" }}>
+            {/* kanji above name */}
             <div
               style={{
-                fontFamily: "'Noto Serif JP',serif",
+                fontFamily: JP,
                 fontSize: 10,
                 color: "rgba(240,238,66,.25)",
                 letterSpacing: ".15em",
@@ -124,9 +183,20 @@ export default function Footer() {
                 color: "#f0ee42",
                 letterSpacing: "-.02em",
                 lineHeight: 1,
-                marginBottom: 12,
+                marginBottom: 8,
               }}>
               {personal.name.toUpperCase()}
+            </div>
+            {/* kana name */}
+            <div
+              style={{
+                fontFamily: JP,
+                fontSize: 9,
+                color: "rgba(240,238,66,.2)",
+                letterSpacing: ".12em",
+                marginBottom: 12,
+              }}>
+              ノーファル・アンドレシャ
             </div>
             <div
               style={{
@@ -146,35 +216,64 @@ export default function Footer() {
                 color: "#2a2a2a",
                 letterSpacing: ".12em",
                 lineHeight: 1.8,
+                marginBottom: 20,
               }}>
               // Building reliable systems,
               <br />
               // one commit at a time.
             </div>
+            {/* JP version of tagline */}
+            <div
+              style={{
+                fontFamily: JP,
+                fontSize: 9,
+                color: "#1e1e1e",
+                letterSpacing: ".08em",
+                lineHeight: 1.8,
+              }}>
+              信頼性の高いシステムを、
+              <br />
+              一つのコミットずつ。
+            </div>
           </div>
 
-          {/* col 2 — nav */}
+          {/* col 2 — navigate */}
           <div
             style={{
               borderRight: "3px solid #1a1a1a",
               padding: "40px 40px",
               display: "flex",
               flexDirection: "column",
-              gap: 0,
             }}>
-            <span
+            <div
               style={{
-                fontFamily: MONO,
-                fontSize: 9,
-                color: "#333",
-                letterSpacing: ".25em",
-                textTransform: "uppercase",
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
                 marginBottom: 16,
               }}>
-              // Navigate
-            </span>
+              <span
+                style={{
+                  fontFamily: MONO,
+                  fontSize: 9,
+                  color: "#333",
+                  letterSpacing: ".25em",
+                  textTransform: "uppercase",
+                }}>
+                // Navigate
+              </span>
+              <span
+                style={{
+                  fontFamily: JP,
+                  fontSize: 8,
+                  color: "#222",
+                  letterSpacing: ".05em",
+                }}>
+                ナビ
+              </span>
+            </div>
             {NAV_LINKS.map((l) => (
-              <NavLink key={l.label} {...l} arrow="▶" />
+              <NavLink key={l.label} {...l} arrow="▶" isMobile={false} />
             ))}
           </div>
 
@@ -186,54 +285,45 @@ export default function Footer() {
               flexDirection: "column",
               justifyContent: "space-between",
             }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-              <span
+            <div>
+              <div
                 style={{
-                  fontFamily: MONO,
-                  fontSize: 9,
-                  color: "#333",
-                  letterSpacing: ".25em",
-                  textTransform: "uppercase",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
                   marginBottom: 16,
                 }}>
-                // Connect
-              </span>
+                <span
+                  style={{
+                    fontFamily: MONO,
+                    fontSize: 9,
+                    color: "#333",
+                    letterSpacing: ".25em",
+                    textTransform: "uppercase",
+                  }}>
+                  // Connect
+                </span>
+                <span
+                  style={{
+                    fontFamily: JP,
+                    fontSize: 8,
+                    color: "#222",
+                    letterSpacing: ".05em",
+                  }}>
+                  連絡先
+                </span>
+              </div>
               {SOCIAL_LINKS.map((l) => (
-                <NavLink key={l.label} {...l} arrow="→" external />
+                <NavLink
+                  key={l.label}
+                  {...l}
+                  arrow="→"
+                  external
+                  isMobile={false}
+                />
               ))}
             </div>
-            {/* available badge */}
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                padding: "10px 14px",
-                border: "2px solid #1a1a1a",
-                width: "fit-content",
-                marginTop: 24,
-              }}>
-              <span
-                style={{
-                  width: 6,
-                  height: 6,
-                  borderRadius: "50%",
-                  background: "#5adb8a",
-                  flexShrink: 0,
-                  animation: "nbPulseF 2s ease-in-out infinite",
-                }}
-              />
-              <span
-                style={{
-                  fontFamily: MONO,
-                  fontSize: 9,
-                  color: "#5adb8a",
-                  letterSpacing: ".18em",
-                  textTransform: "uppercase",
-                }}>
-                Open to work
-              </span>
-            </div>
+            <AvailBadge />
           </div>
         </div>
       )}
@@ -243,7 +333,17 @@ export default function Footer() {
         <div style={{ borderBottom: "3px solid #1a1a1a" }}>
           {/* brand block */}
           <div
-            style={{ padding: "32px 24px", borderBottom: "3px solid #1a1a1a" }}>
+            style={{ padding: "28px 24px", borderBottom: "3px solid #1a1a1a" }}>
+            <div
+              style={{
+                fontFamily: JP,
+                fontSize: 9,
+                color: "rgba(240,238,66,.2)",
+                letterSpacing: ".1em",
+                marginBottom: 6,
+              }}>
+              開発者
+            </div>
             <div
               style={{
                 fontFamily: COND,
@@ -252,9 +352,19 @@ export default function Footer() {
                 color: "#f0ee42",
                 letterSpacing: "-.02em",
                 lineHeight: 1,
-                marginBottom: 8,
+                marginBottom: 4,
               }}>
               NAK_
+            </div>
+            <div
+              style={{
+                fontFamily: JP,
+                fontSize: 9,
+                color: "rgba(240,238,66,.15)",
+                letterSpacing: ".1em",
+                marginBottom: 10,
+              }}>
+              ノーファル・アンドレシャ
             </div>
             <div
               style={{
@@ -263,97 +373,81 @@ export default function Footer() {
                 color: "#444",
                 letterSpacing: ".15em",
                 textTransform: "uppercase",
-                marginBottom: 16,
+                marginBottom: 14,
               }}>
               {personal.role}
             </div>
-            {/* available badge */}
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 7,
-                padding: "8px 12px",
-                border: "2px solid #1a1a1a",
-                background: "#111",
-              }}>
-              <span
-                style={{
-                  width: 6,
-                  height: 6,
-                  borderRadius: "50%",
-                  background: "#5adb8a",
-                  flexShrink: 0,
-                  animation: "nbPulseF 2s ease-in-out infinite",
-                }}
-              />
-              <span
-                style={{
-                  fontFamily: MONO,
-                  fontSize: 9,
-                  color: "#5adb8a",
-                  letterSpacing: ".15em",
-                  textTransform: "uppercase",
-                  fontWeight: 500,
-                }}>
-                Open to work
-              </span>
-            </div>
+            <AvailBadge />
           </div>
 
-          {/* nav + connect side by side on mobile */}
+          {/* nav + connect 2-col */}
           <div
             style={{
               display: "grid",
               gridTemplateColumns: "1fr 1fr",
               borderBottom: "3px solid #1a1a1a",
             }}>
-            {/* nav col */}
             <div
               style={{
-                padding: "24px 20px",
+                padding: "22px 20px",
                 borderRight: "3px solid #1a1a1a",
               }}>
-              <span
+              <div
                 style={{
-                  fontFamily: MONO,
-                  fontSize: 9,
-                  color: "#333",
-                  letterSpacing: ".25em",
-                  textTransform: "uppercase",
-                  display: "block",
-                  marginBottom: 14,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
+                  marginBottom: 12,
                 }}>
-                // Navigate
-              </span>
+                <span
+                  style={{
+                    fontFamily: MONO,
+                    fontSize: 9,
+                    color: "#333",
+                    letterSpacing: ".25em",
+                    textTransform: "uppercase",
+                  }}>
+                  // Nav
+                </span>
+                <span style={{ fontFamily: JP, fontSize: 7, color: "#222" }}>
+                  ナビ
+                </span>
+              </div>
               {NAV_LINKS.map((l) => (
-                <NavLink key={l.label} {...l} arrow="▶" />
+                <NavLink key={l.label} {...l} arrow="▶" isMobile />
               ))}
             </div>
-
-            {/* connect col */}
-            <div style={{ padding: "24px 20px" }}>
-              <span
+            <div style={{ padding: "22px 20px" }}>
+              <div
                 style={{
-                  fontFamily: MONO,
-                  fontSize: 9,
-                  color: "#333",
-                  letterSpacing: ".25em",
-                  textTransform: "uppercase",
-                  display: "block",
-                  marginBottom: 14,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
+                  marginBottom: 12,
                 }}>
-                // Connect
-              </span>
+                <span
+                  style={{
+                    fontFamily: MONO,
+                    fontSize: 9,
+                    color: "#333",
+                    letterSpacing: ".25em",
+                    textTransform: "uppercase",
+                  }}>
+                  // Connect
+                </span>
+                <span style={{ fontFamily: JP, fontSize: 7, color: "#222" }}>
+                  連絡
+                </span>
+              </div>
               {SOCIAL_LINKS.map((l) => (
-                <NavLink key={l.label} {...l} arrow="→" external />
+                <NavLink key={l.label} {...l} arrow="→" external isMobile />
               ))}
             </div>
           </div>
         </div>
       )}
 
-      {/* ── ticker strip ── */}
+      {/* ── ticker strip — mix romaji + kanji ── */}
       <div
         style={{
           borderBottom: "3px solid #1a1a1a",
@@ -362,21 +456,28 @@ export default function Footer() {
           display: "flex",
           alignItems: "center",
         }}>
+        {/* render 2 identical tracks side by side — animate first track to -100% width of one track */}
         <div
           style={{
             display: "flex",
-            animation: "nbFooterTick 20s linear infinite",
+            width: "max-content",
+            animation: "nbFooterTick 32s linear infinite",
           }}>
-          {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => (
+          {[
+            ...TICKER_ITEMS,
+            ...TICKER_ITEMS,
+            ...TICKER_ITEMS,
+            ...TICKER_ITEMS,
+          ].map((item, i) => (
             <span
               key={i}
               style={{
-                fontFamily: MONO,
-                fontSize: 10,
-                letterSpacing: ".18em",
+                fontFamily: i % 2 === 1 ? JP : MONO,
+                fontSize: i % 2 === 1 ? 13 : 10,
+                letterSpacing: i % 2 === 1 ? ".04em" : ".18em",
                 textTransform: "uppercase",
-                color: i % 4 === 0 ? "#f0ee42" : "#2a2a2a",
-                padding: "0 22px",
+                color: i % 6 === 0 ? "#f0ee42" : "#2a2a2a",
+                padding: "0 20px",
                 borderRight: "1px solid #1a1a1a",
                 whiteSpace: "nowrap",
                 lineHeight: "40px",
@@ -400,15 +501,27 @@ export default function Footer() {
           flexWrap: "wrap",
           gap: 10,
         }}>
-        <span
-          style={{
-            fontFamily: MONO,
-            fontSize: 10,
-            color: "#2a2a2a",
-            letterSpacing: ".12em",
-          }}>
-          © {year} {isMobile ? "NAK" : personal.name}
-        </span>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <span
+            style={{
+              fontFamily: MONO,
+              fontSize: 10,
+              color: "#2a2a2a",
+              letterSpacing: ".12em",
+            }}>
+            © {year} {isMobile ? "NAK" : personal.name}
+          </span>
+          {/* JP copyright note */}
+          <span
+            style={{
+              fontFamily: JP,
+              fontSize: 8,
+              color: "#1a1a1a",
+              letterSpacing: ".06em",
+            }}>
+            無断複製禁止
+          </span>
+        </div>
         {!isMobile && (
           <span
             style={{
@@ -442,7 +555,10 @@ export default function Footer() {
             transition: "all .18s",
             boxShadow: topHover ? "3px 3px 0 rgba(240,238,66,.2)" : "none",
           }}>
-          ↑ Top
+          ↑ <span>Top</span>
+          <span style={{ fontFamily: JP, fontSize: 8, opacity: 0.5 }}>
+            上へ
+          </span>
         </button>
       </div>
     </footer>
