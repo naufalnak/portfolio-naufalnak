@@ -1,3 +1,5 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import Cursor from "./components/Cursor";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
@@ -9,7 +11,10 @@ import GitHubStats from "./components/GitHubStats";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 
-export default function App() {
+import ProjectsPage from "./pages/ProjectsPage";
+import ProjectDetailPage from "./pages/ProjectDetailPage";
+
+function HomePage() {
   return (
     <div style={{ minHeight: "100vh" }}>
       <Cursor />
@@ -25,5 +30,17 @@ export default function App() {
       </main>
       <Footer />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/projects" element={<ProjectsPage />} />
+        <Route path="/projects/:slug" element={<ProjectDetailPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }

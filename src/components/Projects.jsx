@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { projects } from "../data/portfolio";
 
 /* ─── shared ─── */
@@ -1129,6 +1130,52 @@ export default function Projects() {
               </span>
             </div>
           ))}
+        </div>
+
+        {/* ── View All CTA ── */}
+        <div
+          style={{
+            marginTop: 32,
+            display: "flex",
+            justifyContent: "flex-end",
+          }}>
+          <Link
+            to="/projects"
+            style={{
+              fontFamily: MONO,
+              fontSize: 11,
+              letterSpacing: "0.22em",
+              textTransform: "uppercase",
+              textDecoration: "none",
+              color: "#0a0a0a",
+              background: "#f0ee42",
+              border: "3px solid #0a0a0a",
+              padding: "14px 28px",
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              fontWeight: 700,
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "#0a0a0a";
+              e.currentTarget.style.color = "#f0ee42";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "#f0ee42";
+              e.currentTarget.style.color = "#0a0a0a";
+            }}>
+            View all projects
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </Link>
         </div>
       </div>
     </section>
