@@ -6,7 +6,7 @@ export const personal = {
   location: "Bekasi, Indonesia",
   email: "naufal.ndak17@gmail.com",
   github: "naufalnak",
-  linkedin: "naufalnak",
+  linkedin: "naufalandr",
   twitter: "#",
   bio: "Informatics graduate with a focus on web and mobile development. Experienced in building backend systems and RESTful APIs, with hands-on exposure to Android development and UI/UX design.",
   bioExtended:
@@ -101,7 +101,7 @@ export const projects = [
     desc: "A CodeIgniter 3 web application for managing a content writing service business. Built as the practical project for BNSP Junior Web Programmer certification, covering order management, service catalog, admin dashboard, and WhatsApp notifications via Fonnte API.",
     tags: ["PHP", "CodeIgniter 3", "MySQL", "Fonnte API"],
     type: "Full Stack",
-    link: null,
+    link: "https://lsp-gunadarma2025.great-site.net/?i=1",
     repo: null,
     featured: false,
     image: "/projects/bnsp-project.png",

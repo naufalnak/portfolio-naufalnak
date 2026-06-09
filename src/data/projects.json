@@ -9,7 +9,7 @@
     "tags": ["Python", "Streamlit", "TensorFlow Lite", "NumPy"],
     "type": "AI",
     "link": "https://chatbot-nutrisi-makanan-snoopynak.streamlit.app/",
-    "repo": null,
+    "repo": "https://github.com/naufalnak/chatbot-nutrisi-makanan",
     "featured": true,
     "image": "/projects/food.png"
   },
@@ -36,7 +36,7 @@
     "desc": "A multi-tenant vehicle repair shop management platform, the web app evolution of MORE (MoBo Repair). Built with a proper multi-tenant architecture: operators manage customers, vehicles, service orders, invoices, and digital payments, while customers can find workshops, book appointments, and track their order status in real time.",
     "tags": ["Next.js 15", "TypeScript", "Prisma", "Supabase", "NextAuth"],
     "type": "Full Stack",
-    "link": "https://saas-workshop-ruby.vercel.app/",
+    "link": "https://servisyuk.naufalandr.my.id/",
     "repo": "https://github.com/naufalnak/saas-workshop",
     "featured": true,
     "image": "/projects/servisyuk.png"
@@ -78,7 +78,7 @@
     "desc": "A CodeIgniter 3 web application for managing a content writing service business. Built as the practical project for BNSP Junior Web Programmer certification, covering order management, service catalog, admin dashboard, and WhatsApp notifications via Fonnte API.",
     "tags": ["PHP", "CodeIgniter 3", "MySQL", "Fonnte API"],
     "type": "Full Stack",
-    "link": null,
+    "link": "https://lsp-gunadarma2025.great-site.net/?i=1",
     "repo": null,
     "featured": false,
     "image": "/projects/bnsp-project.png"

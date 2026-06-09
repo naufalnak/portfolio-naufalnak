@@ -159,7 +159,7 @@ export const personal = {
   location: "Bekasi, Indonesia",
   email: "you@example.com",
   github: "naufalnak", // Used for GitHub Stats
-  linkedin: "naufalnak",
+  linkedin: "naufalandr",
   bio: "Your bio...",
   resumeUrl: "https://...",
 };
