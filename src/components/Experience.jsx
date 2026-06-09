@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useReveal } from "../hooks/useReveal";
-import { experience } from "../data/portfolio";
+import { experience, certifications } from "../data/portfolio";
 
 const MONO = "'DM Mono','Fira Mono',monospace";
 const COND = "'Barlow Condensed','Arial Narrow',sans-serif";
@@ -8,10 +8,7 @@ const JP = "'Noto Serif JP',serif";
 
 const ROW_ACCENT = ["#f0ee42", "#5adb8a", "#6eb5ff", "#ff6b6b", "#f0ee42"];
 
-/* JP labels per experience type */
 const TYPE_JP = { internship: "実務経験", edu: "教育" };
-
-/* JP label per stat */
 const STAT_JP = ["回数", "学位", "成績", "卒業"];
 
 function useIsMobile(bp = 768) {
@@ -41,7 +38,6 @@ function ExpRow({ item, index }) {
         borderBottom: "3px solid #0a0a0a",
         transitionDelay: `${index * 90}ms`,
       }}>
-      {/* clickable header */}
       <div
         style={{
           display: "grid",
@@ -56,11 +52,9 @@ function ExpRow({ item, index }) {
         onMouseLeave={(e) =>
           (e.currentTarget.style.background = "transparent")
         }>
-        {/* ── MOBILE layout ── */}
         {isMobile ? (
           <>
             <div style={{ padding: "20px 18px" }}>
-              {/* type badge + JP */}
               <div
                 style={{
                   display: "flex",
@@ -93,7 +87,6 @@ function ExpRow({ item, index }) {
                   {jpType}
                 </span>
               </div>
-
               <h3
                 style={{
                   fontFamily: COND,
@@ -126,7 +119,6 @@ function ExpRow({ item, index }) {
                 }}>
                 {item.period}
               </div>
-
               {item.stack.length > 0 && (
                 <div
                   style={{
@@ -152,8 +144,6 @@ function ExpRow({ item, index }) {
                 </div>
               )}
             </div>
-
-            {/* toggle */}
             <div
               style={{
                 borderLeft: "3px solid #0a0a0a",
@@ -179,9 +169,7 @@ function ExpRow({ item, index }) {
             </div>
           </>
         ) : (
-          /* ── DESKTOP layout ── */
           <>
-            {/* period + badge + JP col */}
             <div
               style={{
                 borderRight: "3px solid #0a0a0a",
@@ -203,7 +191,6 @@ function ExpRow({ item, index }) {
                 }}>
                 {item.period}
               </span>
-
               <div
                 style={{
                   display: "flex",
@@ -231,7 +218,6 @@ function ExpRow({ item, index }) {
                   }}>
                   {isWork ? "Internship" : "Education"}
                 </span>
-                {/* JP translation of badge */}
                 <span
                   style={{
                     fontFamily: JP,
@@ -244,10 +230,7 @@ function ExpRow({ item, index }) {
                 </span>
               </div>
             </div>
-
-            {/* role + company + stack col */}
             <div style={{ padding: "28px 36px" }}>
-              {/* small JP annotation above role */}
               <div
                 style={{
                   display: "flex",
@@ -268,7 +251,6 @@ function ExpRow({ item, index }) {
                   style={{ width: 16, height: 1, background: "rgba(0,0,0,.1)" }}
                 />
               </div>
-
               <h3
                 style={{
                   fontFamily: COND,
@@ -291,7 +273,6 @@ function ExpRow({ item, index }) {
                 }}>
                 {item.company}
               </div>
-
               {item.stack.length > 0 && (
                 <div
                   style={{
@@ -328,8 +309,6 @@ function ExpRow({ item, index }) {
                 </div>
               )}
             </div>
-
-            {/* toggle col */}
             <div
               style={{
                 borderLeft: "3px solid #0a0a0a",
@@ -356,7 +335,7 @@ function ExpRow({ item, index }) {
         )}
       </div>
 
-      {/* expanded description */}
+      {/* expanded */}
       <div
         style={{
           maxHeight: open ? 400 : 0,
@@ -372,7 +351,6 @@ function ExpRow({ item, index }) {
             background: "#f7f7f4",
             position: "relative",
           }}>
-          {/* JP label in expanded area */}
           <div
             style={{
               display: "flex",
@@ -402,6 +380,197 @@ function ExpRow({ item, index }) {
             }}>
             {item.desc}
           </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ══ Certification Row ══ */
+function CertRow({ item, index }) {
+  const ref = useReveal();
+  const isMobile = useIsMobile();
+  const accent = "#E8B86D";
+
+  return (
+    <div
+      ref={ref}
+      className="nb-reveal"
+      style={{
+        borderBottom: "3px solid #0a0a0a",
+        transitionDelay: `${index * 90}ms`,
+      }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: isMobile ? "1fr" : "220px 1fr",
+        }}>
+        {/* Left col */}
+        <div
+          style={{
+            borderRight: isMobile ? "none" : "3px solid #0a0a0a",
+            borderBottom: isMobile ? "3px solid #e8e8e0" : "none",
+            padding: isMobile ? "16px 18px 12px" : "24px 24px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            gap: 8,
+          }}>
+          <span
+            style={{
+              fontFamily: MONO,
+              fontSize: 10,
+              color: "#555",
+              letterSpacing: ".05em",
+            }}>
+            {item.date}
+          </span>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <span
+              style={{
+                display: "inline-block",
+                fontFamily: MONO,
+                fontSize: 9,
+                fontWeight: 700,
+                letterSpacing: ".18em",
+                textTransform: "uppercase",
+                background: accent,
+                color: "#0a0a0a",
+                padding: "4px 10px",
+                width: "fit-content",
+                border: "1.5px solid #0a0a0a",
+              }}>
+              Certification
+            </span>
+            <span
+              style={{
+                fontFamily: JP,
+                fontSize: 8,
+                color: "rgba(0,0,0,.22)",
+                letterSpacing: ".06em",
+                paddingLeft: 2,
+              }}>
+              資格
+            </span>
+          </div>
+        </div>
+
+        {/* Right col */}
+        <div style={{ padding: isMobile ? "16px 18px 20px" : "24px 36px" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+              marginBottom: 6,
+            }}>
+            <span
+              style={{
+                fontFamily: JP,
+                fontSize: 8,
+                color: "rgba(0,0,0,.2)",
+                letterSpacing: ".08em",
+              }}>
+              資格
+            </span>
+            <div
+              style={{ width: 16, height: 1, background: "rgba(0,0,0,.1)" }}
+            />
+          </div>
+
+          <h3
+            style={{
+              fontFamily: COND,
+              fontSize: isMobile ? 20 : 24,
+              fontWeight: 700,
+              color: "#0a0a0a",
+              letterSpacing: "-.01em",
+              lineHeight: 1.1,
+              marginBottom: 4,
+            }}>
+            {item.title}
+          </h3>
+          <div
+            style={{
+              fontFamily: MONO,
+              fontSize: isMobile ? 10 : 11,
+              color: "#555",
+              letterSpacing: ".12em",
+              textTransform: "uppercase",
+              marginBottom: 10,
+            }}>
+            {item.issuer}
+          </div>
+
+          {/* Credential no + valid */}
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 8,
+              marginBottom: 12,
+            }}>
+            <span
+              style={{
+                fontFamily: MONO,
+                fontSize: 9,
+                color: "#888",
+                border: "1.5px solid #ddd",
+                padding: "3px 10px",
+                letterSpacing: ".05em",
+                background: "#f5f5f0",
+              }}>
+              No. {item.credentialNo}
+            </span>
+            <span
+              style={{
+                fontFamily: MONO,
+                fontSize: 9,
+                color: "#888",
+                border: "1.5px solid #ddd",
+                padding: "3px 10px",
+                letterSpacing: ".05em",
+                background: "#f5f5f0",
+              }}>
+              {item.valid}
+            </span>
+          </div>
+
+          {/* Tags */}
+          {item.tags?.length > 0 && (
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: isMobile ? 5 : 6,
+              }}>
+              {item.tags.map((s) => (
+                <span
+                  key={s}
+                  style={{
+                    fontFamily: MONO,
+                    fontSize: isMobile ? 9 : 10,
+                    color: "#333",
+                    border: "1.5px solid #bbb",
+                    padding: "3px 10px",
+                    letterSpacing: ".05em",
+                    transition: "all .15s",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = accent;
+                    e.currentTarget.style.borderColor = accent;
+                    e.currentTarget.style.color = "#0a0a0a";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "transparent";
+                    e.currentTarget.style.borderColor = "#bbb";
+                    e.currentTarget.style.color = "#333";
+                  }}>
+                  {s}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -471,7 +640,6 @@ export default function Experience() {
             04 — Experience
           </span>
           <div style={{ flex: 1, height: 3, background: "#0a0a0a" }} />
-          {/* JP annotation */}
           <span
             style={{
               fontFamily: JP,
@@ -520,7 +688,6 @@ export default function Experience() {
               // Work Experience
             </span>
             <div style={{ flex: 1, height: 3, background: "#0a0a0a" }} />
-            {/* JP label */}
             <span
               style={{
                 fontFamily: JP,
@@ -542,7 +709,7 @@ export default function Experience() {
         </div>
 
         {/* ── Education ── */}
-        <div style={{ marginBottom: isMobile ? 36 : 56 }}>
+        <div style={{ marginBottom: isMobile ? 28 : 48 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 0 }}>
             <span
               style={{
@@ -559,7 +726,6 @@ export default function Experience() {
               // Education
             </span>
             <div style={{ flex: 1, height: 3, background: "#0a0a0a" }} />
-            {/* JP label */}
             <span
               style={{
                 fontFamily: JP,
@@ -579,6 +745,46 @@ export default function Experience() {
             ))}
           </div>
         </div>
+
+        {/* ── Certifications ── */}
+        {certifications?.length > 0 && (
+          <div style={{ marginBottom: isMobile ? 36 : 56 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 0 }}>
+              <span
+                style={{
+                  fontFamily: MONO,
+                  fontSize: 10,
+                  fontWeight: 700,
+                  letterSpacing: ".2em",
+                  textTransform: "uppercase",
+                  background: "#0a0a0a",
+                  color: "#f0ee42",
+                  padding: "7px 14px",
+                  whiteSpace: "nowrap",
+                }}>
+                // Certifications
+              </span>
+              <div style={{ flex: 1, height: 3, background: "#0a0a0a" }} />
+              <span
+                style={{
+                  fontFamily: JP,
+                  fontSize: 9,
+                  color: "rgba(0,0,0,.3)",
+                  padding: "7px 12px",
+                  whiteSpace: "nowrap",
+                  borderLeft: "3px solid #0a0a0a",
+                  background: "rgba(0,0,0,.04)",
+                }}>
+                資格
+              </span>
+            </div>
+            <div style={{ border: "3px solid #0a0a0a", borderTop: "none" }}>
+              {certifications.map((item, i) => (
+                <CertRow key={item.id} item={item} index={i} />
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* ── Stats strip ── */}
         <div
@@ -606,7 +812,6 @@ export default function Experience() {
                 position: "relative",
                 overflow: "hidden",
               }}>
-              {/* ghost kanji */}
               <span
                 style={{
                   position: "absolute",
@@ -621,7 +826,6 @@ export default function Experience() {
                 }}>
                 {STAT_JP[i]}
               </span>
-
               <div
                 style={{
                   fontFamily: COND,

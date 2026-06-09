@@ -25,13 +25,19 @@ const TYPE_JP = {
 };
 
 /* ── Markdown loader via Vite glob ── */
-const mdModules = import.meta.glob("../content/projects/*.md", {
+const mdEN = import.meta.glob("../content/projects/en/*.md", {
   query: "?raw",
   import: "default",
 });
-async function loadMarkdown(slug) {
-  const key = `../content/projects/${slug}.md`;
-  return mdModules[key] ? await mdModules[key]() : null;
+const mdID = import.meta.glob("../content/projects/id/*.md", {
+  query: "?raw",
+  import: "default",
+});
+
+async function loadMarkdown(slug, lang) {
+  const map = lang === "en" ? mdEN : mdID;
+  const key = `../content/projects/${lang}/${slug}.md`;
+  return map[key] ? await map[key]() : null;
 }
 
 /* ── Inject once ── */
@@ -110,7 +116,7 @@ function PageNav() {
         }}>
         NAK_
       </Link>
-      <div style={{ display: "flex", alignItems: "center", gap: 0 }}>
+      <div style={{ display: "flex", alignItems: "center" }}>
         <Link
           to="/"
           className="pdnav-home"
@@ -162,6 +168,46 @@ function PageNav() {
         </Link>
       </div>
     </header>
+  );
+}
+
+/* ── Language Toggle ── */
+function LangToggle({ lang, onChange }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 0,
+        border: "2.5px solid #0a0a0a",
+        overflow: "hidden",
+        flexShrink: 0,
+      }}>
+      {["en", "id"].map((l) => {
+        const active = lang === l;
+        return (
+          <button
+            key={l}
+            onClick={() => onChange(l)}
+            style={{
+              fontFamily: MONO,
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              padding: "7px 14px",
+              cursor: "pointer",
+              background: active ? "#0a0a0a" : "#fafaf8",
+              color: active ? "#f0ee42" : "#888",
+              border: "none",
+              borderRight: l === "en" ? "2.5px solid #0a0a0a" : "none",
+              transition: "background 0.15s,color 0.15s",
+            }}>
+            {l.toUpperCase()}
+          </button>
+        );
+      })}
+    </div>
   );
 }
 
@@ -223,24 +269,26 @@ function RelatedCard({ p }) {
 /* ── Main ── */
 export default function ProjectDetailPage() {
   const { slug } = useParams();
+  const [lang, setLang] = useState("id");
   const [content, setContent] = useState(null);
   const [loading, setLoading] = useState(true);
+
   const project = projects.find((p) => p.slug === slug);
 
+  /* Load markdown on slug or lang change */
   useEffect(() => {
     window.scrollTo(0, 0);
     setLoading(true);
     setContent(null);
-    loadMarkdown(slug).then((md) => {
+    loadMarkdown(slug, lang).then((md) => {
       setContent(md);
       setLoading(false);
     });
-  }, [slug]);
+  }, [slug, lang]);
 
   useGlobalStyle(
     "pdpage-style",
     `
-    /* Layout */
     .pd-hero-inner { padding:36px 16px 32px; max-width:900px; margin:0 auto; }
     @media(min-width:640px){ .pd-hero-inner{padding:48px 48px 40px;} }
     @media(min-width:1024px){ .pd-hero-inner{padding:56px 64px 48px;} }
@@ -248,6 +296,20 @@ export default function ProjectDetailPage() {
     .pd-content-wrap { max-width:900px; margin:0 auto; padding:0 16px; }
     @media(min-width:640px){ .pd-content-wrap{padding:0 48px;} }
     @media(min-width:1024px){ .pd-content-wrap{padding:0 64px;} }
+
+    .pd-content-inner { padding:40px 0; border-right:3px solid #e8e8e0; }
+
+    /* Content header: label + toggle */
+    .pd-content-header {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:28px;
+      padding-bottom:16px;
+      border-bottom:2.5px solid #0a0a0a;
+      gap:12px;
+      flex-wrap:wrap;
+    }
 
     .pd-related { max-width:900px; margin:0 auto; padding:36px 16px; border-top:3px solid #0a0a0a; }
     @media(min-width:640px){ .pd-related{padding:40px 48px;} }
@@ -261,56 +323,59 @@ export default function ProjectDetailPage() {
       display:flex;justify-content:space-between;align-items:center;background:#fafaf8; }
     @media(min-width:640px){ .pd-bottom{padding:22px 48px;} }
 
-    /* CTA buttons — stack on narrow mobile */
     .pd-cta { display:flex; flex-wrap:wrap; gap:0; }
 
     /* Markdown */
     .proj-md h1 {
       font-family:'Barlow Condensed','Arial Narrow',sans-serif;
-      font-size:clamp(24px,5vw,36px); font-weight:900; letter-spacing:-0.01em;
-      color:#0a0a0a; margin:36px 0 14px; line-height:1.1;
-      border-bottom:3px solid #0a0a0a; padding-bottom:10px;
+      font-size:clamp(22px,5vw,34px);font-weight:900;letter-spacing:-0.01em;
+      color:#0a0a0a;margin:36px 0 14px;line-height:1.1;
+      border-bottom:3px solid #0a0a0a;padding-bottom:10px;
     }
-    .proj-md h1:first-child { margin-top:0; }
-    .proj-md h2 {
+    .proj-md h1:first-child{margin-top:0;}
+    .proj-md h2{
       font-family:'Barlow Condensed','Arial Narrow',sans-serif;
-      font-size:clamp(16px,3vw,22px); font-weight:800; letter-spacing:0.05em;
-      text-transform:uppercase; color:#0a0a0a; margin:30px 0 10px;
+      font-size:clamp(15px,3vw,20px);font-weight:800;letter-spacing:0.05em;
+      text-transform:uppercase;color:#0a0a0a;margin:28px 0 10px;
     }
-    .proj-md h3 {
-      font-family:'DM Mono','Fira Mono',monospace; font-size:12px; font-weight:600;
-      letter-spacing:0.1em; text-transform:uppercase; color:#555; margin:20px 0 7px;
+    .proj-md h3{
+      font-family:'DM Mono','Fira Mono',monospace;font-size:11px;font-weight:600;
+      letter-spacing:0.12em;text-transform:uppercase;color:#555;margin:20px 0 7px;
     }
-    .proj-md p {
-      font-family:'DM Sans',sans-serif; font-size:clamp(13px,2vw,15px);
-      line-height:1.8; color:#333; margin:0 0 14px;
+    .proj-md p{
+      font-family:'DM Sans',sans-serif;font-size:clamp(13px,2vw,15px);
+      line-height:1.8;color:#333;margin:0 0 14px;
     }
-    .proj-md ul,.proj-md ol { margin:0 0 14px 0; padding-left:20px; }
-    .proj-md li {
-      font-family:'DM Sans',sans-serif; font-size:clamp(13px,2vw,15px);
-      line-height:1.7; color:#333; margin-bottom:5px;
+    .proj-md ul,.proj-md ol{margin:0 0 14px 0;padding-left:20px;}
+    .proj-md li{
+      font-family:'DM Sans',sans-serif;font-size:clamp(13px,2vw,15px);
+      line-height:1.7;color:#333;margin-bottom:5px;
     }
-    .proj-md li::marker { color:#f0ee42; }
-    .proj-md strong { font-weight:700; color:#0a0a0a; }
-    .proj-md em { font-style:italic; color:#555; }
-    .proj-md code {
-      font-family:'DM Mono','Fira Mono',monospace; font-size:12px;
-      background:#f0f0ea; border:1.5px solid #ddd; padding:2px 6px; color:#0a0a0a;
+    .proj-md li::marker{color:#f0ee42;}
+    .proj-md strong{font-weight:700;color:#0a0a0a;}
+    .proj-md em{font-style:italic;color:#555;}
+    .proj-md code{
+      font-family:'DM Mono','Fira Mono',monospace;font-size:12px;
+      background:#f0f0ea;border:1.5px solid #ddd;padding:2px 6px;color:#0a0a0a;
     }
-    .proj-md pre {
-      background:#0a0a0a; border:3px solid #0a0a0a;
-      padding:16px 18px; overflow-x:auto; margin:18px 0;
+    .proj-md pre{
+      background:#0a0a0a;border:3px solid #0a0a0a;
+      padding:16px 18px;overflow-x:auto;margin:18px 0;
     }
-    .proj-md pre code { background:none;border:none;color:#f0ee42;font-size:12px;padding:0; }
-    .proj-md blockquote {
-      border-left:4px solid #f0ee42; margin:16px 0;
-      padding:10px 16px; background:#f5f5f0;
+    .proj-md pre code{background:none;border:none;color:#f0ee42;font-size:12px;padding:0;}
+    .proj-md blockquote{
+      border-left:4px solid #f0ee42;margin:16px 0;
+      padding:10px 16px;background:#f5f5f0;
     }
-    .proj-md blockquote p { margin:0; font-style:italic; }
-    .proj-md hr { border:none; border-top:2px solid #e8e8e0; margin:28px 0; }
-    .proj-md a { color:#0a0a0a; text-decoration:underline;
-      text-decoration-color:#f0ee42; text-underline-offset:3px; }
-    .proj-md a:hover { color:#555; }
+    .proj-md blockquote p{margin:0;font-style:italic;}
+    .proj-md hr{border:none;border-top:2px solid #e8e8e0;margin:28px 0;}
+    .proj-md a{color:#0a0a0a;text-decoration:underline;
+      text-decoration-color:#f0ee42;text-underline-offset:3px;}
+    .proj-md a:hover{color:#555;}
+
+    /* Fade transition on content change */
+    @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+    .proj-md-enter { animation: fadeIn 0.2s ease forwards; }
   `,
   );
 
@@ -361,7 +426,7 @@ export default function ProjectDetailPage() {
               border: "2.5px solid #0a0a0a",
               padding: "10px 24px",
             }}>
-            ← Back to Projects
+            Back to Projects
           </Link>
         </div>
       </div>
@@ -386,7 +451,6 @@ export default function ProjectDetailPage() {
             position: "relative",
             overflow: "hidden",
           }}>
-          {/* Ghost */}
           <div
             style={{
               position: "absolute",
@@ -402,7 +466,6 @@ export default function ProjectDetailPage() {
             }}>
             {jpLabel}
           </div>
-          {/* BG image */}
           {project.image && (
             <div
               style={{
@@ -459,7 +522,7 @@ export default function ProjectDetailPage() {
                     border: "1.5px solid #333",
                     padding: "3px 7px",
                   }}>
-                  ★ Featured
+                  Featured
                 </span>
               )}
             </div>
@@ -517,7 +580,7 @@ export default function ProjectDetailPage() {
 
             {/* CTA */}
             <div className="pd-cta">
-              {project.link && project.link != "#" && (
+              {project.link && project.link !== "#" && (
                 <a
                   href={project.link}
                   target="_blank"
@@ -548,7 +611,7 @@ export default function ProjectDetailPage() {
                   <IconExt /> Live Demo
                 </a>
               )}
-              {project.repo && project.repo != "#" && (
+              {project.repo && project.repo !== "#" && (
                 <a
                   href={project.repo}
                   target="_blank"
@@ -562,7 +625,7 @@ export default function ProjectDetailPage() {
                     color: "#888",
                     border: "2.5px solid #222",
                     borderLeft:
-                      project.link && project.link != "#"
+                      project.link && project.link !== "#"
                         ? "none"
                         : "2.5px solid #222",
                     padding: "10px 18px",
@@ -584,7 +647,32 @@ export default function ProjectDetailPage() {
 
         {/* ── Markdown content ── */}
         <div className="pd-content-wrap">
-          <div style={{ padding: "40px 0", borderRight: "3px solid #e8e8e0" }}>
+          <div className="pd-content-inner">
+            {/* Header: section label + lang toggle */}
+            <div className="pd-content-header">
+              <div style={{ display: "flex", alignItems: "center", gap: 0 }}>
+                <span
+                  style={{
+                    fontFamily: MONO,
+                    fontSize: 9,
+                    fontWeight: 500,
+                    letterSpacing: "0.22em",
+                    textTransform: "uppercase",
+                    color: "#888",
+                    background: "#f0f0ea",
+                    border: "2.5px solid #0a0a0a",
+                    padding: "6px 14px",
+                  }}>
+                  // Case Study
+                </span>
+                <div
+                  style={{ width: 32, height: 2.5, background: "#0a0a0a" }}
+                />
+              </div>
+              <LangToggle lang={lang} onChange={setLang} />
+            </div>
+
+            {/* Content */}
             {loading ? (
               <div
                 style={{
@@ -598,7 +686,7 @@ export default function ProjectDetailPage() {
                 Loading...
               </div>
             ) : content ? (
-              <div className="proj-md">
+              <div className="proj-md proj-md-enter" key={lang}>
                 <ReactMarkdown>{content}</ReactMarkdown>
               </div>
             ) : (
@@ -612,7 +700,9 @@ export default function ProjectDetailPage() {
                   color: "#bbb",
                   letterSpacing: "0.12em",
                 }}>
-                No detailed writeup yet for this project.
+                {lang === "id"
+                  ? "Belum ada writeup untuk project ini."
+                  : "No writeup available for this project yet."}
               </div>
             )}
           </div>

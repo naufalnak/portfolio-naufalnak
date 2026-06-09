@@ -20,8 +20,8 @@ Modul yang saya bantu kembangkan mencakup:
 
 # Impact
 
-Modul ini digunakan oleh ratusan mahasiswa per semester. Pengalaman ini mengajarkan saya bahwa **menulis kode yang bisa dipahami orang lain** sama pentingnya dengan menulis kode yang berjalan prinsip yang masih saya pegang sampai sekarang.
+Modul ini digunakan oleh ratusan mahasiswa per semester. Pengalaman ini mengajarkan saya bahwa **menulis kode yang bisa dipahami orang lain** sama pentingnya dengan menulis kode yang berjalan  prinsip yang masih saya pegang sampai sekarang.
 
 # What I Learned
 
-Mengajar adalah cara terbaik untuk belajar. Ketika harus menjelaskan konsep ke mahasiswa yang baru pertama kali menyentuh programming, saya dipaksa untuk benar-benar memahami fundamentals bukan hanya hafal syntax, tapi mengerti _mengapa_ sesuatu bekerja seperti itu.
+Mengajar adalah cara terbaik untuk belajar. Ketika harus menjelaskan konsep ke mahasiswa yang baru pertama kali menyentuh programming, saya dipaksa untuk benar-benar memahami fundamentals  bukan hanya hafal syntax, tapi mengerti *mengapa* sesuatu bekerja seperti itu.

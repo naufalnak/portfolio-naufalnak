@@ -84,247 +84,263 @@ function FeaturedCard({ p, index }) {
   const color = TYPE_COLOR[p.type] ?? "#f0ee42";
   const jpLabel = TYPE_JP[p.type] ?? "作品";
 
+  const slug =
+    p.slug ??
+    p.title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
   return (
-    <div
-      ref={ref}
-      className="nb-reveal feat-card"
-      style={{
-        position: "relative",
-        overflow: "hidden",
-        border: "3px solid #0a0a0a",
-        transitionDelay: `${index * 100}ms`,
-        cursor: "default",
-        height: 420,
-      }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}>
-      {/* bg image */}
+    <Link
+      to={`/projects/${slug}`}
+      style={{ textDecoration: "none", color: "inherit", display: "block" }}>
       <div
+        ref={ref}
+        className="nb-reveal feat-card"
         style={{
-          position: "absolute",
-          inset: 0,
-          backgroundImage: `url(${p.image})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          transform: hovered ? "scale(1.05)" : "scale(1)",
-          transition: "transform .6s cubic-bezier(.16,1,.3,1)",
-          filter: hovered ? "brightness(.35)" : "brightness(.22)",
+          position: "relative",
+          overflow: "hidden",
+          border: "3px solid #0a0a0a",
+          transitionDelay: `${index * 100}ms`,
+          cursor: "pointer",
+          height: 420,
         }}
-      />
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}>
+        {/* bg image */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            backgroundImage: `url(${p.image})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            transform: hovered ? "scale(1.05)" : "scale(1)",
+            transition: "transform .6s cubic-bezier(.16,1,.3,1)",
+            filter: hovered ? "brightness(.35)" : "brightness(.22)",
+          }}
+        />
 
-      {/* noise */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.06'/%3E%3C/svg%3E\")",
-          pointerEvents: "none",
-        }}
-      />
+        {/* noise */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            backgroundImage:
+              "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.06'/%3E%3C/svg%3E\")",
+            pointerEvents: "none",
+          }}
+        />
 
-      {/* index watermark */}
-      <span
-        style={{
-          position: "absolute",
-          top: 16,
-          right: 20,
-          fontFamily: COND,
-          fontSize: 96,
-          fontWeight: 900,
-          color: "rgba(255,255,255,.06)",
-          lineHeight: 1,
-          letterSpacing: "-.04em",
-          userSelect: "none",
-        }}>
-        {String(index + 1).padStart(2, "0")}
-      </span>
-
-      {/* type badge + JP sub-label */}
-      <div
-        style={{
-          position: "absolute",
-          top: 20,
-          left: 20,
-          display: "flex",
-          flexDirection: "column",
-          gap: 3,
-        }}>
+        {/* index watermark */}
         <span
           style={{
-            fontFamily: MONO,
-            fontSize: 9,
-            fontWeight: 700,
-            letterSpacing: ".18em",
-            textTransform: "uppercase",
-            background: color,
-            color: "#0a0a0a",
-            padding: "4px 10px",
-          }}>
-          {p.type}
-        </span>
-        <span
-          style={{
-            fontFamily: JP,
-            fontSize: 9,
-            color: "rgba(255,255,255,.35)",
-            letterSpacing: ".05em",
-            paddingLeft: 2,
-          }}>
-          {jpLabel}
-        </span>
-      </div>
-
-      {/* year */}
-      <span
-        style={{
-          position: "absolute",
-          top: 24,
-          left: "50%",
-          transform: "translateX(-50%)",
-          fontFamily: MONO,
-          fontSize: 11,
-          color: "rgba(255,255,255,.4)",
-          letterSpacing: ".1em",
-        }}>
-        {p.year}
-      </span>
-
-      {/* bottom content */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          padding: "32px 28px 28px",
-          background:
-            "linear-gradient(to top, rgba(10,10,10,.97) 60%, transparent)",
-        }}>
-        <h3
-          style={{
+            position: "absolute",
+            top: 16,
+            right: 20,
             fontFamily: COND,
-            fontSize: 34,
-            fontWeight: 800,
-            color: "#fff",
-            lineHeight: 1.05,
-            letterSpacing: "-.01em",
-            marginBottom: 10,
+            fontSize: 96,
+            fontWeight: 900,
+            color: "rgba(255,255,255,.06)",
+            lineHeight: 1,
+            letterSpacing: "-.04em",
+            userSelect: "none",
           }}>
-          {p.title}
-        </h3>
+          {String(index + 1).padStart(2, "0")}
+        </span>
 
+        {/* type badge + JP sub-label */}
         <div
           style={{
-            maxHeight: hovered ? 80 : 0,
-            overflow: "hidden",
-            transition: "max-height .4s cubic-bezier(.16,1,.3,1)",
-            marginBottom: hovered ? 14 : 0,
-          }}>
-          <p
-            style={{
-              fontSize: 13,
-              color: "rgba(255,255,255,.7)",
-              lineHeight: 1.65,
-            }}>
-            {p.desc}
-          </p>
-        </div>
-
-        <div
-          style={{
+            position: "absolute",
+            top: 20,
+            left: 20,
             display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-            gap: 8,
+            flexDirection: "column",
+            gap: 3,
           }}>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
-            {p.tags.slice(0, 4).map((tag) => (
-              <span
-                key={tag}
-                style={{
-                  fontFamily: MONO,
-                  fontSize: 9,
-                  color: "rgba(255,255,255,.55)",
-                  border: "1.5px solid rgba(255,255,255,.2)",
-                  padding: "3px 8px",
-                  letterSpacing: ".06em",
-                  background: hovered ? "rgba(255,255,255,.08)" : "transparent",
-                  transition: "background .25s",
-                }}>
-                {tag}
-              </span>
-            ))}
+          <span
+            style={{
+              fontFamily: MONO,
+              fontSize: 9,
+              fontWeight: 700,
+              letterSpacing: ".18em",
+              textTransform: "uppercase",
+              background: color,
+              color: "#0a0a0a",
+              padding: "4px 10px",
+            }}>
+            {p.type}
+          </span>
+          <span
+            style={{
+              fontFamily: JP,
+              fontSize: 9,
+              color: "rgba(255,255,255,.35)",
+              letterSpacing: ".05em",
+              paddingLeft: 2,
+            }}>
+            {jpLabel}
+          </span>
+        </div>
+
+        {/* year */}
+        <span
+          style={{
+            position: "absolute",
+            top: 24,
+            left: "50%",
+            transform: "translateX(-50%)",
+            fontFamily: MONO,
+            fontSize: 11,
+            color: "rgba(255,255,255,.4)",
+            letterSpacing: ".1em",
+          }}>
+          {p.year}
+        </span>
+
+        {/* bottom content */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            padding: "32px 28px 28px",
+            background:
+              "linear-gradient(to top, rgba(10,10,10,.97) 60%, transparent)",
+          }}>
+          <h3
+            style={{
+              fontFamily: COND,
+              fontSize: 34,
+              fontWeight: 800,
+              color: "#fff",
+              lineHeight: 1.05,
+              letterSpacing: "-.01em",
+              marginBottom: 10,
+            }}>
+            {p.title}
+          </h3>
+
+          <div
+            style={{
+              maxHeight: hovered ? 80 : 0,
+              overflow: "hidden",
+              transition: "max-height .4s cubic-bezier(.16,1,.3,1)",
+              marginBottom: hovered ? 14 : 0,
+            }}>
+            <p
+              style={{
+                fontSize: 13,
+                color: "rgba(255,255,255,.7)",
+                lineHeight: 1.65,
+                display: "-webkit-box",
+                WebkitLineClamp: 3,
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+              }}>
+              {p.desc}
+            </p>
           </div>
-          <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-            {p.repo && p.repo !== "#" && (
-              <a
-                href={p.repo}
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  color: "rgba(255,255,255,.5)",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 5,
-                  textDecoration: "none",
-                  fontFamily: MONO,
-                  fontSize: 10,
-                  letterSpacing: ".1em",
-                  textTransform: "uppercase",
-                  transition: "color .15s",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = color)}
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.color = "rgba(255,255,255,.5)")
-                }>
-                <IconGH /> Repo
-              </a>
-            )}
-            {p.link && p.link !== "#" && (
-              <a
-                href={p.link}
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  color: "rgba(255,255,255,.5)",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 5,
-                  textDecoration: "none",
-                  fontFamily: MONO,
-                  fontSize: 10,
-                  letterSpacing: ".1em",
-                  textTransform: "uppercase",
-                  transition: "color .15s",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = color)}
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.color = "rgba(255,255,255,.5)")
-                }>
-                <IconExt /> Live
-              </a>
-            )}
+
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+              gap: 8,
+            }}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
+              {p.tags.slice(0, 4).map((tag) => (
+                <span
+                  key={tag}
+                  style={{
+                    fontFamily: MONO,
+                    fontSize: 9,
+                    color: "rgba(255,255,255,.55)",
+                    border: "1.5px solid rgba(255,255,255,.2)",
+                    padding: "3px 8px",
+                    letterSpacing: ".06em",
+                    background: hovered
+                      ? "rgba(255,255,255,.08)"
+                      : "transparent",
+                    transition: "background .25s",
+                  }}>
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+              {p.repo && p.repo !== "#" && (
+                <a
+                  href={p.repo}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    color: "rgba(255,255,255,.5)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 5,
+                    textDecoration: "none",
+                    fontFamily: MONO,
+                    fontSize: 10,
+                    letterSpacing: ".1em",
+                    textTransform: "uppercase",
+                    transition: "color .15s",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = color)}
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.color = "rgba(255,255,255,.5)")
+                  }>
+                  <IconGH /> Repo
+                </a>
+              )}
+              {p.link && p.link !== "#" && (
+                <a
+                  href={p.link}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    color: "rgba(255,255,255,.5)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 5,
+                    textDecoration: "none",
+                    fontFamily: MONO,
+                    fontSize: 10,
+                    letterSpacing: ".1em",
+                    textTransform: "uppercase",
+                    transition: "color .15s",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = color)}
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.color = "rgba(255,255,255,.5)")
+                  }>
+                  <IconExt /> Live
+                </a>
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* accent bar */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: 3,
-          background: color,
-          transform: hovered ? "scaleX(1)" : "scaleX(0)",
-          transformOrigin: "left",
-          transition: "transform .4s cubic-bezier(.16,1,.3,1)",
-        }}
-      />
-    </div>
+        {/* accent bar */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: 3,
+            background: color,
+            transform: hovered ? "scaleX(1)" : "scaleX(0)",
+            transformOrigin: "left",
+            transition: "transform .4s cubic-bezier(.16,1,.3,1)",
+          }}
+        />
+      </div>
+    </Link>
   );
 }
 
@@ -337,185 +353,213 @@ function GalleryCard({ p, index, noBorderRight }) {
   const color = TYPE_COLOR[p.type] ?? "#f0ee42";
   const jpLabel = TYPE_JP[p.type] ?? "作品";
 
+  const slug =
+    p.slug ??
+    p.title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
   return (
-    <div
-      ref={ref}
-      className="nb-reveal"
+    <Link
+      to={`/projects/${slug}`}
       style={{
-        border: "3px solid #0a0a0a",
-        borderTop: "none",
-        borderRight: noBorderRight ? "none" : "3px solid #0a0a0a",
-        transitionDelay: `${index * 60}ms`,
-        overflow: "hidden",
+        textDecoration: "none",
+        color: "inherit",
         display: "flex",
         flexDirection: "column",
-      }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}>
-      {/* image */}
+      }}>
       <div
+        ref={ref}
+        className="nb-reveal"
         style={{
-          position: "relative",
-          height: 180,
+          border: "3px solid #0a0a0a",
+          borderTop: "none",
+          borderRight: noBorderRight ? "none" : "3px solid #0a0a0a",
+          transitionDelay: `${index * 60}ms`,
           overflow: "hidden",
-          borderBottom: "3px solid #0a0a0a",
-          flexShrink: 0,
-        }}>
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            backgroundImage: `url(${p.image})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            transform: hovered ? "scale(1.08)" : "scale(1)",
-            transition: "transform .5s cubic-bezier(.16,1,.3,1)",
-            filter: "brightness(.85)",
-          }}
-        />
-
-        {/* type + JP badge */}
-        <div
-          style={{
-            position: "absolute",
-            top: 12,
-            left: 12,
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-          }}>
-          <span
-            style={{
-              fontFamily: MONO,
-              fontSize: 8,
-              fontWeight: 700,
-              letterSpacing: ".16em",
-              textTransform: "uppercase",
-              background: color,
-              color: "#0a0a0a",
-              padding: "3px 8px",
-            }}>
-            {p.type}
-          </span>
-          <span
-            style={{
-              fontFamily: JP,
-              fontSize: 8,
-              color: "rgba(255,255,255,.45)",
-              letterSpacing: ".04em",
-              paddingLeft: 2,
-            }}>
-            {jpLabel}
-          </span>
-        </div>
-
-        <span
-          style={{
-            position: "absolute",
-            bottom: 10,
-            right: 12,
-            fontFamily: MONO,
-            fontSize: 11,
-            color: "rgba(255,255,255,.7)",
-          }}>
-          {p.year}
-        </span>
-      </div>
-
-      {/* card body */}
-      <div
-        style={{
-          padding: "20px 22px 22px",
-          flex: 1,
-          background: hovered ? "rgba(240,238,66,.04)" : "#fafaf8",
-          transition: "background .2s",
           display: "flex",
           flexDirection: "column",
-        }}>
+          cursor: "pointer",
+        }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}>
+        {/* image */}
         <div
           style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
-            marginBottom: 8,
+            position: "relative",
+            height: 180,
+            overflow: "hidden",
+            borderBottom: "3px solid #0a0a0a",
+            flexShrink: 0,
           }}>
-          <h3
-            style={{
-              fontFamily: COND,
-              fontSize: 20,
-              fontWeight: 700,
-              color: "#0a0a0a",
-              letterSpacing: "-.01em",
-              lineHeight: 1.15,
-              flex: 1,
-            }}>
-            {p.title}
-          </h3>
           <div
-            style={{ display: "flex", gap: 8, marginLeft: 10, flexShrink: 0 }}>
-            {p.repo && p.repo !== "#" && (
-              <a
-                href={p.repo}
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  color: "#bbb",
-                  textDecoration: "none",
-                  transition: "color .15s",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "#0a0a0a")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "#bbb")}>
-                <IconGH />
-              </a>
-            )}
-            {p.link && p.link !== "#" && (
-              <a
-                href={p.link}
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  color: "#bbb",
-                  textDecoration: "none",
-                  transition: "color .15s",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "#0a0a0a")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "#bbb")}>
-                <IconExt />
-              </a>
-            )}
-          </div>
-        </div>
-        <p
-          style={{
-            fontSize: 12,
-            color: "#666",
-            lineHeight: 1.65,
-            marginBottom: 14,
-            flex: 1,
-          }}>
-          {p.desc}
-        </p>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
-          {p.tags.slice(0, 3).map((tag) => (
+            style={{
+              position: "absolute",
+              inset: 0,
+              backgroundImage: `url(${p.image})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              transform: hovered ? "scale(1.08)" : "scale(1)",
+              transition: "transform .5s cubic-bezier(.16,1,.3,1)",
+              filter: "brightness(.85)",
+            }}
+          />
+
+          {/* type + JP badge */}
+          <div
+            style={{
+              position: "absolute",
+              top: 12,
+              left: 12,
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+            }}>
             <span
-              key={tag}
               style={{
                 fontFamily: MONO,
-                fontSize: 9,
-                color: "#888",
-                border: "1.5px solid #e0e0e0",
+                fontSize: 8,
+                fontWeight: 700,
+                letterSpacing: ".16em",
+                textTransform: "uppercase",
+                background: color,
+                color: "#0a0a0a",
                 padding: "3px 8px",
-                letterSpacing: ".05em",
-                background: hovered ? `${color}18` : "transparent",
-                borderColor: hovered ? color : "#e0e0e0",
-                transition: "all .2s",
               }}>
-              {tag}
+              {p.type}
             </span>
-          ))}
+            <span
+              style={{
+                fontFamily: JP,
+                fontSize: 8,
+                color: "rgba(255,255,255,.45)",
+                letterSpacing: ".04em",
+                paddingLeft: 2,
+              }}>
+              {jpLabel}
+            </span>
+          </div>
+
+          <span
+            style={{
+              position: "absolute",
+              bottom: 10,
+              right: 12,
+              fontFamily: MONO,
+              fontSize: 11,
+              color: "rgba(255,255,255,.7)",
+            }}>
+            {p.year}
+          </span>
+        </div>
+
+        {/* card body */}
+        <div
+          style={{
+            padding: "20px 22px 22px",
+            flex: 1,
+            background: hovered ? "rgba(240,238,66,.04)" : "#fafaf8",
+            transition: "background .2s",
+            display: "flex",
+            flexDirection: "column",
+          }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+              marginBottom: 8,
+            }}>
+            <h3
+              style={{
+                fontFamily: COND,
+                fontSize: 20,
+                fontWeight: 700,
+                color: "#0a0a0a",
+                letterSpacing: "-.01em",
+                lineHeight: 1.15,
+                flex: 1,
+              }}>
+              {p.title}
+            </h3>
+            <div
+              style={{
+                display: "flex",
+                gap: 8,
+                marginLeft: 10,
+                flexShrink: 0,
+              }}>
+              {p.repo && p.repo !== "#" && (
+                <a
+                  href={p.repo}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    color: "#bbb",
+                    textDecoration: "none",
+                    transition: "color .15s",
+                  }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.color = "#0a0a0a")
+                  }
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "#bbb")}>
+                  <IconGH />
+                </a>
+              )}
+              {p.link && p.link !== "#" && (
+                <a
+                  href={p.link}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    color: "#bbb",
+                    textDecoration: "none",
+                    transition: "color .15s",
+                  }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.color = "#0a0a0a")
+                  }
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "#bbb")}>
+                  <IconExt />
+                </a>
+              )}
+            </div>
+          </div>
+          <p
+            style={{
+              fontSize: 12,
+              color: "#666",
+              lineHeight: 1.65,
+              marginBottom: 14,
+              display: "-webkit-box",
+              WebkitLineClamp: 3,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+            }}>
+            {p.desc}
+          </p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+            {p.tags.slice(0, 3).map((tag) => (
+              <span
+                key={tag}
+                style={{
+                  fontFamily: MONO,
+                  fontSize: 9,
+                  color: "#888",
+                  border: "1.5px solid #e0e0e0",
+                  padding: "3px 8px",
+                  letterSpacing: ".05em",
+                  background: hovered ? `${color}18` : "transparent",
+                  borderColor: hovered ? color : "#e0e0e0",
+                  transition: "all .2s",
+                }}>
+                {tag}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
@@ -528,192 +572,210 @@ function ListRow({ p, index }) {
   const color = TYPE_COLOR[p.type] ?? "#f0ee42";
   const jpLabel = TYPE_JP[p.type] ?? "作品";
 
+  const slug =
+    p.slug ??
+    p.title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
   return (
-    <div
-      ref={ref}
-      className="nb-reveal list-row"
-      style={{
-        borderBottom: "3px solid #0a0a0a",
-        transitionDelay: `${index * 60}ms`,
-        background: hovered ? "rgba(240,238,66,.04)" : "transparent",
-        transition: "background .2s",
-      }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}>
+    <Link
+      to={`/projects/${slug}`}
+      style={{ textDecoration: "none", color: "inherit", display: "block" }}>
       <div
-        className="list-row-inner"
-        style={{ display: "grid", gridTemplateColumns: "80px 80px 1fr 100px" }}>
-        {/* thumb */}
+        ref={ref}
+        className="nb-reveal list-row"
+        style={{
+          borderBottom: "3px solid #0a0a0a",
+          transitionDelay: `${index * 60}ms`,
+          background: hovered ? "rgba(240,238,66,.04)" : "transparent",
+          transition: "background .2s",
+          cursor: "pointer",
+        }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}>
         <div
+          className="list-row-inner"
           style={{
-            borderRight: "3px solid #0a0a0a",
-            overflow: "hidden",
-            height: 80,
+            display: "grid",
+            gridTemplateColumns: "80px 80px 1fr 100px",
           }}>
+          {/* thumb */}
           <div
             style={{
-              width: "100%",
-              height: "100%",
-              backgroundImage: `url(${p.image})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              transform: hovered ? "scale(1.1)" : "scale(1)",
-              transition: "transform .4s cubic-bezier(.16,1,.3,1)",
-              filter: "brightness(.9)",
-            }}
-          />
-        </div>
-
-        {/* meta */}
-        <div
-          style={{
-            borderRight: "3px solid #0a0a0a",
-            padding: "12px 14px",
-            display: "flex",
-            flexDirection: "column",
-            gap: 4,
-            justifyContent: "center",
-          }}>
-          <span style={{ fontFamily: MONO, fontSize: 11, color: "#888" }}>
-            {p.year}
-          </span>
-          <span
-            style={{
-              fontFamily: MONO,
-              fontSize: 8,
-              fontWeight: 700,
-              letterSpacing: ".15em",
-              textTransform: "uppercase",
-              background: color,
-              color: "#0a0a0a",
-              padding: "2px 6px",
-              display: "inline-block",
+              borderRight: "3px solid #0a0a0a",
+              overflow: "hidden",
+              height: 80,
             }}>
-            {p.type}
-          </span>
-          {/* JP label */}
-          <span
-            style={{
-              fontFamily: JP,
-              fontSize: 8,
-              color: "#bbb",
-              letterSpacing: ".04em",
-            }}>
-            {jpLabel}
-          </span>
-        </div>
-
-        {/* body */}
-        <div style={{ padding: "18px 28px" }}>
-          <h3
-            style={{
-              fontFamily: COND,
-              fontSize: 22,
-              fontWeight: 700,
-              color: "#0a0a0a",
-              letterSpacing: "-.01em",
-              lineHeight: 1.1,
-              marginBottom: 6,
-            }}>
-            {p.title}
-          </h3>
-          <p
-            style={{
-              fontSize: 13,
-              color: "#666",
-              lineHeight: 1.6,
-              marginBottom: 10,
-              maxWidth: 520,
-            }}>
-            {p.desc}
-          </p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
-            {p.tags.slice(0, 4).map((tag) => (
-              <span
-                key={tag}
-                style={{
-                  fontFamily: MONO,
-                  fontSize: 9,
-                  color: "#777",
-                  border: "1.5px solid #ddd",
-                  padding: "2px 8px",
-                  letterSpacing: ".04em",
-                }}>
-                {tag}
-              </span>
-            ))}
+            <div
+              style={{
+                width: "100%",
+                height: "100%",
+                backgroundImage: `url(${p.image})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                transform: hovered ? "scale(1.1)" : "scale(1)",
+                transition: "transform .4s cubic-bezier(.16,1,.3,1)",
+                filter: "brightness(.9)",
+              }}
+            />
           </div>
-        </div>
 
-        {/* links */}
-        <div
-          style={{
-            borderLeft: "3px solid #0a0a0a",
-            padding: "18px 16px",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            gap: 10,
-          }}>
-          {p.repo && p.repo !== "#" && (
-            <a
-              href={p.repo}
-              target="_blank"
-              rel="noreferrer"
-              style={{
-                fontFamily: MONO,
-                fontSize: 10,
-                letterSpacing: ".1em",
-                textTransform: "uppercase",
-                color: "#aaa",
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-                gap: 5,
-                transition: "color .15s",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#0a0a0a")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "#aaa")}>
-              <IconGH /> Repo
-            </a>
-          )}
-          {p.link && p.link !== "#" && (
-            <a
-              href={p.link}
-              target="_blank"
-              rel="noreferrer"
-              style={{
-                fontFamily: MONO,
-                fontSize: 10,
-                letterSpacing: ".1em",
-                textTransform: "uppercase",
-                color: "#aaa",
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-                gap: 5,
-                transition: "color .15s",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#0a0a0a")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "#aaa")}>
-              <IconExt /> Live
-            </a>
-          )}
-          {(!p.link || p.link === "#") && (!p.repo || p.repo === "#") && (
+          {/* meta */}
+          <div
+            style={{
+              borderRight: "3px solid #0a0a0a",
+              padding: "12px 14px",
+              display: "flex",
+              flexDirection: "column",
+              gap: 4,
+              justifyContent: "center",
+            }}>
+            <span style={{ fontFamily: MONO, fontSize: 11, color: "#888" }}>
+              {p.year}
+            </span>
             <span
               style={{
                 fontFamily: MONO,
-                fontSize: 9,
-                color: "#ccc",
-                letterSpacing: ".1em",
+                fontSize: 8,
+                fontWeight: 700,
+                letterSpacing: ".15em",
                 textTransform: "uppercase",
+                background: color,
+                color: "#0a0a0a",
+                padding: "2px 6px",
+                display: "inline-block",
               }}>
-              Private
+              {p.type}
             </span>
-          )}
+            {/* JP label */}
+            <span
+              style={{
+                fontFamily: JP,
+                fontSize: 8,
+                color: "#bbb",
+                letterSpacing: ".04em",
+              }}>
+              {jpLabel}
+            </span>
+          </div>
+
+          {/* body */}
+          <div style={{ padding: "18px 28px" }}>
+            <h3
+              style={{
+                fontFamily: COND,
+                fontSize: 22,
+                fontWeight: 700,
+                color: "#0a0a0a",
+                letterSpacing: "-.01em",
+                lineHeight: 1.1,
+                marginBottom: 6,
+              }}>
+              {p.title}
+            </h3>
+            <p
+              style={{
+                fontSize: 13,
+                color: "#666",
+                lineHeight: 1.6,
+                marginBottom: 10,
+                maxWidth: 520,
+                display: "-webkit-box",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+              }}>
+              {p.desc}
+            </p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
+              {p.tags.slice(0, 4).map((tag) => (
+                <span
+                  key={tag}
+                  style={{
+                    fontFamily: MONO,
+                    fontSize: 9,
+                    color: "#777",
+                    border: "1.5px solid #ddd",
+                    padding: "2px 8px",
+                    letterSpacing: ".04em",
+                  }}>
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* links */}
+          <div
+            style={{
+              borderLeft: "3px solid #0a0a0a",
+              padding: "18px 16px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              gap: 10,
+            }}>
+            {p.repo && p.repo !== "#" && (
+              <a
+                href={p.repo}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  fontFamily: MONO,
+                  fontSize: 10,
+                  letterSpacing: ".1em",
+                  textTransform: "uppercase",
+                  color: "#aaa",
+                  textDecoration: "none",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 5,
+                  transition: "color .15s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "#0a0a0a")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "#aaa")}>
+                <IconGH /> Repo
+              </a>
+            )}
+            {p.link && p.link !== "#" && (
+              <a
+                href={p.link}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  fontFamily: MONO,
+                  fontSize: 10,
+                  letterSpacing: ".1em",
+                  textTransform: "uppercase",
+                  color: "#aaa",
+                  textDecoration: "none",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 5,
+                  transition: "color .15s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "#0a0a0a")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "#aaa")}>
+                <IconExt /> Live
+              </a>
+            )}
+            {(!p.link || p.link === "#") && (!p.repo || p.repo === "#") && (
+              <span
+                style={{
+                  fontFamily: MONO,
+                  fontSize: 9,
+                  color: "#ccc",
+                  letterSpacing: ".1em",
+                  textTransform: "uppercase",
+                }}>
+                Private
+              </span>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 

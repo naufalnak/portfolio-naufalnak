@@ -747,7 +747,7 @@ export default function Hero() {
                       "5px 5px 0 rgba(0,0,0,.2)";
                     e.currentTarget.style.transform = "none";
                   }}>
-                  view work →
+                  view projects →
                 </a>
                 <a
                   href="#contact"

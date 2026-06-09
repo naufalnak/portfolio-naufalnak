@@ -54,6 +54,7 @@ export const skills = [
 export const projects = [
   {
     id: 1,
+    slug: "food-tourism-assistant",
     year: "2025",
     title: "Food Tourism Assistant Indonesia",
     desc: "Streamlit-based app helping foreign tourists explore Indonesian culinary culture. Users upload food photos, a TFLite model identifies the dish, and an interactive chatbot explains ingredients, taste profile, and cultural context from a curated JSON database.",
@@ -66,6 +67,7 @@ export const projects = [
   },
   {
     id: 2,
+    slug: "flight-ticket-booking-api",
     year: "2024",
     title: "Online Flight Ticket Booking System",
     desc: "RESTful API backend for a web-based flight ticket booking system. Features authentication, input validation, media management, email notifications, and modular MVC architecture.",
@@ -78,18 +80,35 @@ export const projects = [
   },
   {
     id: 6,
-    year: "2025",
+    slug: "servisyuk",
+    year: "2026",
     title: "ServisYuk",
     desc: "A multi-tenant vehicle repair shop management platform, the web app evolution of MORE (MoBo Repair). Built with a proper multi-tenant architecture: operators manage customers, vehicles, service orders, invoices, and digital payments, while customers can find workshops, book appointments, and track their order status in real time.",
     tags: ["Next.js 15", "TypeScript", "Prisma", "Supabase", "NextAuth"],
     type: "Full Stack",
-    link: "https://saas-workshop-ruby.vercel.app/",
+    link: "https://servisyuk.naufalandr.my.id/",
     repo: "https://github.com/naufalnak/saas-workshop",
     featured: true,
     image: "/projects/servisyuk.png",
   },
   {
+    id: 7,
+    slug: "jasa-content-writing",
+    year: "2025",
+    title: "Jasa Content Writing",
+    shortDesc:
+      "Web app manajemen layanan content writing dengan fitur pemesanan, katalog, dan notifikasi WhatsApp — dibangun untuk sertifikasi BNSP Junior Web Programmer.",
+    desc: "A CodeIgniter 3 web application for managing a content writing service business. Built as the practical project for BNSP Junior Web Programmer certification, covering order management, service catalog, admin dashboard, and WhatsApp notifications via Fonnte API.",
+    tags: ["PHP", "CodeIgniter 3", "MySQL", "Fonnte API"],
+    type: "Full Stack",
+    link: null,
+    repo: null,
+    featured: false,
+    image: "/projects/bnsp-project.png",
+  },
+  {
     id: 3,
+    slug: "more-mobo-repair",
     year: "2024",
     title: "MORE (MoBo Repair)",
     desc: "Android mobile app for motherboard repair service management, the origin project that later evolved into ServisYuk as a full web platform. Built after 7-day user research and usability testing, with a clean UI implemented in Jetpack Compose.",
@@ -102,6 +121,7 @@ export const projects = [
   },
   {
     id: 4,
+    slug: "uiux-micro-massive",
     year: "2024",
     title: "UI/UX Design — Micro & Massive Projects",
     desc: "User interface design and prototyping for Micro and Massive projects at Kinema Systrans Multimedia. Conducted user research and usability testing using Maze.",
@@ -114,6 +134,7 @@ export const projects = [
   },
   {
     id: 5,
+    slug: "algoritma-lab-module",
     year: "2022",
     title: "Algoritma & Pemrograman Lab Module",
     desc: "Contributed to development of practicum materials for Algorithm and Programming courses using Python, as Lab Assistant at Gunadarma University.",
@@ -180,5 +201,17 @@ export const experience = [
     desc: "Bachelor of Engineering in Informatics with a cumulative GPA of 3.85/4.00 as of Semester 8. Served as Lab Assistant in charge of Algorithm and Programming practicum for 2 semesters using Python, and contributed to the development of practicum materials.",
     stack: [],
     type: "edu",
+  },
+];
+
+export const certifications = [
+  {
+    id: 1,
+    date: "Jun 2025",
+    title: "Junior Web Programmer",
+    issuer: "BNSP — LSP Universitas Gunadarma",
+    credentialNo: "62019 2514 5 0019419 2025",
+    valid: "Valid until Jun 2028",
+    tags: ["PHP", "CodeIgniter 3", "MySQL", "Web Programming"],
   },
 ];

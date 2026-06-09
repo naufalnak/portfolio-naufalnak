@@ -7,7 +7,7 @@ Personal portfolio built with **React + Vite + Tailwind CSS**. Designed with a _
 > Theme: `#fafaf8` background · `#0a0a0a` ink · `#f0ee42` accent  
 > Fonts: [Barlow Condensed](https://fonts.google.com/specimen/Barlow+Condensed) · [DM Mono](https://fonts.google.com/specimen/DM+Mono) · [DM Sans](https://fonts.google.com/specimen/DM+Sans) · [Noto Serif JP](https://fonts.google.com/specimen/Noto+Serif+JP)
 
-Live: [portfolio-naufalnak.vercel.app](https://portfolio-naufalnak.vercel.app)
+Live: [naufalandr.my.id](https://www.naufalandr.my.id/)
 
 ## ✦ Features
 
@@ -90,9 +90,12 @@ portfolio/
 │   │   └── ProjectDetailPage.jsx ← /projects/:slug route
 │   ├── content/
 │   │   └── projects/       ← Markdown writeups per project
-│   │       ├── servisyuk.md
-│   │       ├── flight-ticket-booking-api.md
-│   │       └── ...
+│   │       ├── en/         ← English version
+│   │       │   ├── servisyuk.md
+│   │       │   └── ...
+│   │       └── id/         ← Indonesian version
+│   │           ├── servisyuk.md
+│   │           └── ...
 │   ├── data/
 │   │   ├── portfolio.js    ← Personal info, skills, experience
 │   │   └── projects.json   ← Project list with slugs
@@ -169,6 +172,8 @@ export const personal = {
 | `skills`     | Skill categories and items              |
 | `experience` | Work and education timeline entries     |
 
+> Each project entry in `portfolio.js` must include a `slug` field matching its entry in `projects.json` and its MD filename in `content/projects/{lang}/`. Without it, clicking a card auto-generates a slug from the title which may not match.
+
 ### Projects `src/data/projects.json`
 
 Project list used across all pages. Each entry requires a `slug` field which links to its Markdown file:
@@ -177,7 +182,7 @@ Project list used across all pages. Each entry requires a `slug` field which lin
 {
   "id": 1,
   "slug": "servisyuk",
-  "year": "2025",
+  "year": "2026",
   "title": "ServisYuk",
   "shortDesc": "Short description for the card.",
   "desc": "Longer description shown on the detail page hero.",
@@ -192,16 +197,18 @@ Project list used across all pages. Each entry requires a `slug` field which lin
 
 **Valid `type` values:** `AI` · `Full Stack` · `Backend` · `Mobile` · `Design` · `Education`
 
-### Project Detail Pages `src/content/projects/*.md`
+### Project Detail Pages `src/content/projects/{lang}/*.md`
 
-Each project can have a Markdown writeup rendered on its detail page at `/projects/:slug`. Create a file named `{slug}.md`:
+Each project has a bilingual Markdown writeup rendered on its detail page at `/projects/:slug`. The detail page includes an **EN / ID language toggle** so users can switch between English and Indonesian without reloading.
+
+Create two files per project:
 
 ```
-src/content/projects/servisyuk.md
-src/content/projects/flight-ticket-booking-api.md
+src/content/projects/en/servisyuk.md
+src/content/projects/id/servisyuk.md
 ```
 
-If no `.md` file exists for a project, the detail page shows a placeholder instead.
+If no `.md` file exists for a given language, a placeholder is shown instead. Default language on page load is **ID**.
 
 ### GitHub Stats
 

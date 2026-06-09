@@ -8,7 +8,7 @@ const JP = "'Noto Serif JP',serif";
 const NAV_LINKS = [
   { label: "About", href: "#about" },
   { label: "Skills", href: "#skills" },
-  { label: "Work", href: "#projects" },
+  { label: "Projects", href: "#projects" },
   { label: "Experience", href: "#experience" },
   { label: "Contact", href: "#contact" },
 ];
