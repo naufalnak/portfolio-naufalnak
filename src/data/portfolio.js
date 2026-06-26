@@ -2,7 +2,7 @@ export const personal = {
   name: "Naufal Andresya Kholish",
   firstName: "Naufal",
   lastName: "Andresya Kholish",
-  role: "Back End & Mobile Developer",
+  role: "Back End & Fullstack Developer",
   location: "Bekasi, Indonesia",
   email: "naufal.ndak17@gmail.com",
   github: "naufalnak",
@@ -21,7 +21,7 @@ export const stats = [
   { value: "3+", label: "Years" },
   { value: "10+", label: "Projects" },
   { value: "3.85", label: "GPA" },
-  { value: "6", label: "Certificates" },
+  { value: "4", label: "Experience" },
 ];
 
 export const skills = [
@@ -30,11 +30,14 @@ export const skills = [
     items: [
       "Node.js",
       "Express.js",
+      "Go",
+      "Go Fiber",
       "REST API",
       "PostgreSQL",
       "Prisma ORM",
-      "Go",
+      "Redis",
       "PHP",
+      "Laravel",
     ],
   },
   {
@@ -43,11 +46,27 @@ export const skills = [
   },
   {
     category: "Frontend",
-    items: ["React", "JavaScript", "HTML", "CSS", "Tailwind CSS"],
+    items: [
+      "React",
+      "Next.js",
+      "JavaScript",
+      "TypeScript",
+      "HTML",
+      "CSS",
+      "Tailwind CSS",
+    ],
   },
   {
     category: "Tools & Design",
-    items: ["Git", "Postman", "Figma", "Vitest", "Bootstrap", "SQL"],
+    items: [
+      "Git",
+      "Postman",
+      "Figma",
+      "Vitest",
+      "Bootstrap",
+      "SQL",
+      "AWS Cloud",
+    ],
   },
 ];
 
