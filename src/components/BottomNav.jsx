@@ -80,8 +80,7 @@ export default function BottomNav({ active, onNavigate }) {
                   alignItems: "center",
                   justifyContent: "center",
                   flexShrink: 0,
-                  opacity: isActive ? 1 : 0.6,
-                  transition: "opacity 0.2s",
+                  opacity: 1,
                 }}>
                 {item.icon}
               </span>
