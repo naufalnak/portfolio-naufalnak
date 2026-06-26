@@ -59,6 +59,12 @@ export default function ProjectDetailPage({ slug, onBack, onNavigate }) {
   const project = projects.find((p) => p.slug === slug);
 
   useEffect(() => {
+    document.title = project
+      ? `${project.title} | Naufal Andresya`
+      : "Project Not Found | Naufal Andresya";
+  }, [project]);
+
+  useEffect(() => {
     setLoading(true);
     setContent(null);
     loadMarkdown(slug, lang).then((md) => {
