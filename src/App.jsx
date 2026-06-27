@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
-import Preloader from "./components/Preloader";
+import { useState } from "react";
 import BottomNav from "./components/BottomNav";
+import Preloader from "./components/Preloader";
 import Footer from "./components/Footer";
 import MusicPlayer from "./components/MusicPlayer";
+import Mascot from "./components/Mascot";
 import HomePage from "./pages/HomePage";
 import SkillsPage from "./pages/SkillsPage";
 import ProjectsPage from "./pages/ProjectsPage";
@@ -11,28 +12,28 @@ import ExperiencePage from "./pages/ExperiencePage";
 import GitHubPage from "./pages/GitHubPage";
 import ContactPage from "./pages/ContactPage";
 
-const pageTitles = {
-  home: "Home",
-  skills: "Skills",
-  projects: "Projects",
-  "project-detail": "Project",
-  experience: "Experience",
-  github: "GitHub",
-  contact: "Contact",
-};
-
 export default function App() {
+  const [ready, setReady] = useState(false);
   const [nav, setNav] = useState({ page: "home" });
+
+  const PAGE_TITLES = {
+    home: "Naufal Andresya Kholish",
+    skills: "About | Naufal Andresya Kholish",
+    projects: "Projects | Naufal Andresya Kholish",
+    experience: "Experience | Naufal Andresya Kholish",
+    github: "GitHub | Naufal Andresya Kholish",
+    contact: "Contact | Naufal Andresya Kholish",
+  };
 
   const navigate = (page, slug = null) => {
     setNav(slug ? { page, slug } : { page });
     window.scrollTo(0, 0);
+    if (slug) {
+      document.title = "Project | Naufal Andresya Kholish";
+    } else {
+      document.title = PAGE_TITLES[page] || "Naufal Andresya Kholish";
+    }
   };
-
-  useEffect(() => {
-    const title = pageTitles[nav.page] ?? "Home";
-    document.title = `${title} | Naufal Andresya`;
-  }, [nav.page]);
 
   const renderPage = () => {
     if (nav.page === "project-detail" && nav.slug) {
@@ -65,8 +66,12 @@ export default function App() {
   const showNav = nav.page !== "project-detail";
 
   return (
-    <Preloader>
-      <div className="pf-root">
+    <>
+      {!ready && <Preloader onDone={() => setReady(true)} />}
+
+      <div
+        className="pf-root"
+        style={{ opacity: ready ? 1 : 0, transition: "opacity 0.3s ease" }}>
         <header className="pf-topbar">
           <span className="pf-topbar-logo">NAK_</span>
           <span className="pf-topbar-badge">
@@ -82,11 +87,12 @@ export default function App() {
         <Footer />
 
         <MusicPlayer />
+        <Mascot currentPage={nav.page} />
 
         {showNav && (
           <BottomNav active={nav.page} onNavigate={(page) => navigate(page)} />
         )}
       </div>
-    </Preloader>
+    </>
   );
 }
