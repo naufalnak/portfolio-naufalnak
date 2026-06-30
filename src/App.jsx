@@ -17,7 +17,7 @@ export default function App() {
   const [nav, setNav] = useState({ page: "home" });
 
   const PAGE_TITLES = {
-    home: "Naufal Andresya Kholish",
+    home: "Naufal Andresya Kholish | Portfolio",
     skills: "About | Naufal Andresya Kholish",
     projects: "Projects | Naufal Andresya Kholish",
     experience: "Experience | Naufal Andresya Kholish",
