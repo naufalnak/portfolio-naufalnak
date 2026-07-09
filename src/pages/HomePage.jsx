@@ -2,7 +2,7 @@ import { personal, stats, projects } from "../data/portfolio";
 import DiscordStatus from "../components/DiscordStatus";
 import RoleRotator from "../components/RoleRotator";
 
-const FEATURED_SLUGS = ["servisyuk"];
+const FEATURED_SLUGS = ["BengkelHub"];
 const PROJECT_EMOJI = {
   AI: "🍜",
   Backend: "✈️",
@@ -329,7 +329,7 @@ export default function HomePage({ onNavigate }) {
       />
       <div className="home-proj-grid">
         {featured.map((p) => {
-          const isBlue = p.slug === "servisyuk";
+          const isBlue = p.slug === "BengkelHub";
           const hasImage = p.image && p.image !== "";
           return (
             <div

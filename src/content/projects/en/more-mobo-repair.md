@@ -1,10 +1,10 @@
 # Overview
 
-MORE (MoBo Repair) is an Android application for motherboard repair service management, a project born from the MSIB program and the direct predecessor of **ServisYuk** as a multi-tenant web platform.
+MORE (MoBo Repair) is an Android application for motherboard repair service management, a project born from the MSIB program and the direct predecessor of **BengkelHub** as a multi-tenant web platform.
 
 # The Origin
 
-This project was built with a team during the MSIB program. After graduating, I decided not to simply leave it behind as a memory. I rebuilt the concept solo into a more mature web platform (ServisYuk), proving that I could take an idea from start to production on my own.
+This project was built with a team during the MSIB program. After graduating, I decided not to simply leave it behind as a memory. I rebuilt the concept solo into a more mature web platform (BengkelHub), proving that I could take an idea from start to production on my own.
 
 # Process
 

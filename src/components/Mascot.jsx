@@ -17,7 +17,7 @@ const PAGE_SCRIPTS = {
   ],
   projects: [
     "Ini semua project yang udah saya bangun! 💪",
-    "ServisYuk adalah project fullstack terbaru saya!",
+    "BengkelHub adalah project fullstack terbaru saya!",
     "Ada juga Food Tourism AI pakai TensorFlow Lite! 🍜",
     "Klik card-nya buat baca case study lengkapnya!",
     "Semua project ini dikerjain sendiri lho! 😄",

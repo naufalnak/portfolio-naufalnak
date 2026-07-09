@@ -29,17 +29,17 @@
   },
   {
     "id": 6,
-    "slug": "servisyuk",
+    "slug": "bengkelhub",
     "year": "2025",
-    "title": "ServisYuk",
-    "shortDesc": "Multi-tenant vehicle repair shop management platform built with Next.js 15, TypeScript, and Supabase.",
+    "title": "BengkelHub",
+    "shortDesc": "Multi-tenant vehicle repair shop management platform built with Go/Fiber backend and Next.js frontend.",
     "desc": "A multi-tenant vehicle repair shop management platform, the web app evolution of MORE (MoBo Repair). Built with a proper multi-tenant architecture: operators manage customers, vehicles, service orders, invoices, and digital payments, while customers can find workshops, book appointments, and track their order status in real time.",
-    "tags": ["Next.js 15", "TypeScript", "Prisma", "Supabase", "NextAuth"],
+    "tags": ["Go", "Fiber", "Next.js 16", "TypeScript", "PostgreSQL"],
     "type": "Full Stack",
-    "link": "https://servisyuk.naufalandr.my.id/",
+    "link": "https://BengkelHub.naufalandr.my.id/",
     "repo": "https://github.com/naufalnak/saas-workshop",
     "featured": true,
-    "image": "/projects/servisyuk.png"
+    "image": "/projects/bengkelhub.png"
   },
   {
     "id": 3,
@@ -47,7 +47,7 @@
     "year": "2024",
     "title": "MORE (MoBo Repair)",
     "shortDesc": "Android mobile app for motherboard repair service management, built with Kotlin and Jetpack Compose.",
-    "desc": "Android mobile app for motherboard repair service management, the origin project that later evolved into ServisYuk as a full web platform. Built after 7-day user research and usability testing, with a clean UI implemented in Jetpack Compose.",
+    "desc": "Android mobile app for motherboard repair service management, the origin project that later evolved into BengkelHub as a full web platform. Built after 7-day user research and usability testing, with a clean UI implemented in Jetpack Compose.",
     "tags": ["Kotlin", "Jetpack Compose", "Android Studio", "Figma"],
     "type": "Mobile",
     "link": null,

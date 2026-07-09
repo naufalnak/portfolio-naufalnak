@@ -1,14 +1,14 @@
 # Overview
 
-MORE (MoBo Repair) adalah aplikasi Android untuk manajemen layanan servis motherboard  project yang lahir dari program MSIB dan menjadi cikal bakal **ServisYuk** sebagai platform web multi-tenant.
+MORE (MoBo Repair) adalah aplikasi Android untuk manajemen layanan servis motherboard project yang lahir dari program MSIB dan menjadi cikal bakal **BengkelHub** sebagai platform web multi-tenant.
 
 # The Origin
 
-Project ini dibangun bersama tim selama program MSIB. Setelah lulus, saya memutuskan untuk tidak hanya meninggalkan project ini sebagai kenangan  saya rebuild konsepnya secara solo menjadi web platform yang lebih matang (ServisYuk), membuktikan bahwa saya bisa mengeksekusi ide dari awal sampai production.
+Project ini dibangun bersama tim selama program MSIB. Setelah lulus, saya memutuskan untuk tidak hanya meninggalkan project ini sebagai kenangan saya rebuild konsepnya secara solo menjadi web platform yang lebih matang (BengkelHub), membuktikan bahwa saya bisa mengeksekusi ide dari awal sampai production.
 
 # Process
 
-Sebelum menulis satu baris kode, tim melakukan **7 hari user research**  wawancara dengan pemilik bengkel servis, observasi workflow mereka, dan identifikasi pain points utama. Hasilnya menjadi dasar semua keputusan desain dan fitur.
+Sebelum menulis satu baris kode, tim melakukan **7 hari user research** wawancara dengan pemilik bengkel servis, observasi workflow mereka, dan identifikasi pain points utama. Hasilnya menjadi dasar semua keputusan desain dan fitur.
 
 Usability testing dilakukan menggunakan metodologi yang terstruktur untuk memvalidasi prototype sebelum development dimulai.
 

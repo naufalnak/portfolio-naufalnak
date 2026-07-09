@@ -70,7 +70,7 @@ portfolio/
 ├── public/
 │   ├── favicon.svg
 │   └── projects/           ← Project thumbnail images
-│       ├── servisyuk.png
+│       ├── BengkelHub.png
 │       ├── flight.png
 │       └── ...
 ├── src/
@@ -91,10 +91,10 @@ portfolio/
 │   ├── content/
 │   │   └── projects/       ← Markdown writeups per project
 │   │       ├── en/         ← English version
-│   │       │   ├── servisyuk.md
+│   │       │   ├── BengkelHub.md
 │   │       │   └── ...
 │   │       └── id/         ← Indonesian version
-│   │           ├── servisyuk.md
+│   │           ├── BengkelHub.md
 │   │           └── ...
 │   ├── data/
 │   │   ├── portfolio.js    ← Personal info, skills, experience
@@ -181,9 +181,9 @@ Project list used across all pages. Each entry requires a `slug` field which lin
 ```json
 {
   "id": 1,
-  "slug": "servisyuk",
+  "slug": "bengkelhub",
   "year": "2026",
-  "title": "ServisYuk",
+  "title": "BengkelHub",
   "shortDesc": "Short description for the card.",
   "desc": "Longer description shown on the detail page hero.",
   "tags": ["Next.js 15", "TypeScript", "Supabase"],
@@ -191,7 +191,7 @@ Project list used across all pages. Each entry requires a `slug` field which lin
   "link": "https://your-demo.vercel.app",
   "repo": "https://github.com/naufalnak/your-repo",
   "featured": true,
-  "image": "/projects/servisyuk.png"
+  "image": "/projects/BengkelHub.png"
 }
 ```
 
@@ -204,8 +204,8 @@ Each project has a bilingual Markdown writeup rendered on its detail page at `/p
 Create two files per project:
 
 ```
-src/content/projects/en/servisyuk.md
-src/content/projects/id/servisyuk.md
+src/content/projects/en/BengkelHub.md
+src/content/projects/id/BengkelHub.md
 ```
 
 If no `.md` file exists for a given language, a placeholder is shown instead. Default language on page load is **ID**.

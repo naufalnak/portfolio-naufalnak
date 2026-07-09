@@ -1,6 +1,6 @@
 # Overview
 
-ServisYuk is a multi-tenant vehicle repair shop management platform, rebuilt as a full web platform from the original mobile project **MORE (MoBo Repair)** after graduation.
+BengkelHub is a multi-tenant vehicle repair shop management platform, rebuilt as a full web platform from the original mobile project **MORE (MoBo Repair)** after graduation.
 
 The platform is designed as a three-sided system: a **public marketplace** for customers to find workshops, a **customer portal** for booking and tracking services, and an **operator dashboard** for comprehensive workshop management.
 

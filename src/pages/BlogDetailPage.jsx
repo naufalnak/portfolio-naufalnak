@@ -1,20 +1,94 @@
-import { useState, useEffect } from "react";
-import projects from "../data/projects.json";
+import { useState, useEffect, lazy, Suspense } from "react";
+import { blogPosts, blogCategories, blogCategoryEmoji } from "../data/blog";
+import SlotMachineSimulator from "../components/SlotMachineSimulator";
+import ImageGallery from "../components/ImageGallery";
+import { trackBlogView } from "../lib/trackClick";
 
-/* Markdown loader via Vite glob */
-const mdEN = import.meta.glob("../content/projects/en/*.md", {
+/* Registry of interactive widgets (no parameters) that can be embedded
+   inline inside a blog post's markdown via a {{WIDGET:key}} placeholder. */
+const WIDGETS = {
+  "slot-simulator": SlotMachineSimulator,
+};
+
+/* Splits raw markdown on {{WIDGET:key}} and {{GALLERY:path1,path2,...}}
+   tokens, rendering markdown chunks as markdown and tokens as real
+   React components. Add new token types here as needed. */
+function renderContentWithWidgets(content) {
+  const regex = /\{\{(WIDGET|GALLERY):([^}]+)\}\}/g;
+  const elements = [];
+  let lastIndex = 0;
+  let match;
+  let key = 0;
+
+  while ((match = regex.exec(content)) !== null) {
+    const [full, type, payload] = match;
+
+    if (match.index > lastIndex) {
+      const textChunk = content.slice(lastIndex, match.index);
+      if (textChunk.trim()) {
+        elements.push(
+          <ReactMarkdownWrapper key={`m-${key++}`} content={textChunk} />,
+        );
+      }
+    }
+
+    if (type === "WIDGET") {
+      const Widget = WIDGETS[payload.trim()];
+      if (Widget) elements.push(<Widget key={`w-${key++}`} />);
+    } else if (type === "GALLERY") {
+      const images = payload
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+      elements.push(<ImageGallery key={`g-${key++}`} images={images} />);
+    }
+
+    lastIndex = match.index + full.length;
+  }
+
+  if (lastIndex < content.length) {
+    const rest = content.slice(lastIndex);
+    if (rest.trim()) {
+      elements.push(<ReactMarkdownWrapper key={`m-${key++}`} content={rest} />);
+    }
+  }
+
+  return elements;
+}
+
+/* Markdown loader via Vite glob, same pattern as ProjectDetailPage */
+const mdEN = import.meta.glob("../content/blog/en/*.md", {
   query: "?raw",
   import: "default",
 });
-const mdID = import.meta.glob("../content/projects/id/*.md", {
+const mdID = import.meta.glob("../content/blog/id/*.md", {
   query: "?raw",
   import: "default",
 });
 
 async function loadMarkdown(slug, lang) {
   const map = lang === "en" ? mdEN : mdID;
-  const key = `../content/projects/${lang}/${slug}.md`;
+  const key = `../content/blog/${lang}/${slug}.md`;
   return map[key] ? await map[key]() : null;
+}
+
+const ReactMarkdown = lazy(() => import("react-markdown"));
+function ReactMarkdownWrapper({ content }) {
+  return (
+    <Suspense
+      fallback={
+        <p
+          style={{
+            fontFamily: "'Space Mono', monospace",
+            fontSize: "11px",
+            color: "#aaa",
+          }}>
+          Rendering…
+        </p>
+      }>
+      <ReactMarkdown>{content}</ReactMarkdown>
+    </Suspense>
+  );
 }
 
 function LangToggle({ lang, onChange }) {
@@ -51,18 +125,24 @@ function LangToggle({ lang, onChange }) {
   );
 }
 
-export default function ProjectDetailPage({ slug, onBack, onNavigate }) {
+export default function BlogDetailPage({ slug, onBack, onNavigate }) {
   const [lang, setLang] = useState("id");
   const [content, setContent] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const project = projects.find((p) => p.slug === slug);
+  const post = blogPosts.find((p) => p.slug === slug);
 
   useEffect(() => {
-    document.title = project
-      ? `${project.title} | Naufal Andresya`
-      : "Project Not Found | Naufal Andresya";
-  }, [project]);
+    document.title = post
+      ? `${post.title[lang] || post.title.id} | Naufal Andresya`
+      : "Blog Not Found | Naufal Andresya";
+  }, [post, lang]);
+
+  // Catat 1 "view" per slug (bukan tiap ganti bahasa ID/EN)
+  useEffect(() => {
+    if (post) trackBlogView(slug);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slug]);
 
   useEffect(() => {
     setLoading(true);
@@ -73,7 +153,7 @@ export default function ProjectDetailPage({ slug, onBack, onNavigate }) {
     });
   }, [slug, lang]);
 
-  if (!project) {
+  if (!post) {
     return (
       <div
         style={{
@@ -91,19 +171,24 @@ export default function ProjectDetailPage({ slug, onBack, onNavigate }) {
           }}>
           404
         </div>
-        <p style={{ color: "#888", marginTop: "8px" }}>Project not found.</p>
+        <p style={{ color: "#888", marginTop: "8px" }}>Post not found.</p>
         <button
           className="nb-btn nb-btn-blue"
           onClick={onBack}
           style={{ marginTop: "1.2rem" }}>
-          ← Back to Projects
+          ← Back to Blog
         </button>
       </div>
     );
   }
 
-  const related = projects
-    .filter((p) => p.slug !== slug && p.type === project.type)
+  const dateLabel = new Date(post.date).toLocaleDateString(
+    lang === "id" ? "id-ID" : "en-US",
+    { day: "numeric", month: "long", year: "numeric" },
+  );
+
+  const related = blogPosts
+    .filter((p) => p.slug !== slug && p.category === post.category)
     .slice(0, 3);
 
   return (
@@ -114,10 +199,9 @@ export default function ProjectDetailPage({ slug, onBack, onNavigate }) {
         padding: "1.5rem 1rem 2rem",
       }}>
       <style>{`
-        .detail-hero-btns { display: flex; gap: 8px; flex-wrap: wrap; }
-        .detail-related { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+        .blog-related { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
         @media (max-width: 500px) {
-          .detail-related { grid-template-columns: 1fr 1fr; }
+          .blog-related { grid-template-columns: 1fr 1fr; }
         }
       `}</style>
 
@@ -143,7 +227,7 @@ export default function ProjectDetailPage({ slug, onBack, onNavigate }) {
         }}
         onMouseEnter={(e) => (e.currentTarget.style.color = "#4f6ef7")}
         onMouseLeave={(e) => (e.currentTarget.style.color = "#888")}>
-        ← Back to Projects
+        ← Back to Blog
       </button>
 
       {/* Hero card */}
@@ -154,13 +238,11 @@ export default function ProjectDetailPage({ slug, onBack, onNavigate }) {
           position: "relative",
           overflow: "hidden",
         }}>
-        {/* Deco bg text */}
         <div
           style={{
             position: "absolute",
             right: -10,
             top: -10,
-            fontFamily: "'Space Mono', monospace",
             fontSize: "80px",
             fontWeight: 700,
             opacity: 0.08,
@@ -169,11 +251,10 @@ export default function ProjectDetailPage({ slug, onBack, onNavigate }) {
             userSelect: "none",
             pointerEvents: "none",
           }}>
-          {project.type.replace(" ", "")}
+          {blogCategoryEmoji[post.category]}
         </div>
 
         <div style={{ position: "relative" }}>
-          {/* Badge row */}
           <div
             style={{
               display: "flex",
@@ -195,7 +276,8 @@ export default function ProjectDetailPage({ slug, onBack, onNavigate }) {
                 padding: "3px 9px",
                 color: "#fff",
               }}>
-              {project.type}
+              {blogCategoryEmoji[post.category]}{" "}
+              {blogCategories[post.category][lang]}
             </span>
             <span
               style={{
@@ -203,66 +285,49 @@ export default function ProjectDetailPage({ slug, onBack, onNavigate }) {
                 fontSize: "9px",
                 color: "#b8caff",
               }}>
-              {project.year}
+              {dateLabel} · {post.readTime} min{" "}
+              {lang === "id" ? "baca" : "read"}
             </span>
-            {project.featured && (
-              <span
-                style={{
-                  fontFamily: "'Space Mono', monospace",
-                  fontSize: "8px",
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: "#fff",
-                  background: "rgba(255,255,255,0.1)",
-                  border: "1.5px solid rgba(255,255,255,0.2)",
-                  borderRadius: "4px",
-                  padding: "2px 7px",
-                }}>
-                Featured
-              </span>
-            )}
           </div>
 
-          {/* Title */}
           <h1
             style={{
-              fontSize: "clamp(20px, 5vw, 34px)",
+              fontSize: "clamp(20px, 5vw, 32px)",
               fontWeight: 700,
               color: "#fff",
-              lineHeight: 1.1,
+              lineHeight: 1.15,
               marginBottom: "10px",
             }}>
-            {project.title}
+            {post.title[lang] || post.title.id}
           </h1>
 
-          {/* Desc */}
           <p
             style={{
               fontSize: "13px",
               color: "#b8caff",
               lineHeight: 1.7,
-              marginBottom: "14px",
+              marginBottom: "4px",
               maxWidth: "580px",
             }}>
-            {project.desc}
+            {post.excerpt[lang] || post.excerpt.id}
           </p>
 
-          {/* Tags */}
           <div
             style={{
               display: "flex",
               flexWrap: "wrap",
-              gap: "5px",
-              marginBottom: "16px",
+              gap: "6px",
+              marginTop: "12px",
             }}>
-            {project.tags.map((t) => (
+            {post.tags.map((t) => (
               <span
                 key={t}
                 style={{
+                  fontFamily: "'Space Mono', monospace",
                   fontSize: "9px",
                   fontWeight: 600,
                   background: "rgba(255,255,255,0.12)",
-                  border: "1.5px solid rgba(255,255,255,0.25)",
+                  border: "1.5px solid rgba(255,255,255,0.3)",
                   borderRadius: "4px",
                   padding: "3px 8px",
                   color: "#fff",
@@ -271,90 +336,11 @@ export default function ProjectDetailPage({ slug, onBack, onNavigate }) {
               </span>
             ))}
           </div>
-
-          {/* CTAs */}
-          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-            {project.link && project.link !== "#" && (
-              <a
-                className="nb-btn nb-btn-white"
-                href={project.link}
-                target="_blank"
-                rel="noreferrer"
-                style={{ fontSize: "11px" }}>
-                Live Demo ↗
-              </a>
-            )}
-            {project.repo && project.repo !== "#" && (
-              <a
-                className="nb-btn"
-                href={project.repo}
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  fontSize: "11px",
-                  background: "rgba(255,255,255,0.1)",
-                  color: "#fff",
-                  border: "2px solid rgba(255,255,255,0.3)",
-                  boxShadow: "none",
-                }}>
-                GitHub →
-              </a>
-            )}
-          </div>
         </div>
       </div>
 
-      {/* Project image */}
-      {project.image && project.image !== "" && (
-        <div
-          style={{
-            marginBottom: "1rem",
-            border: "2.5px solid #0a0a0a",
-            borderRadius: "12px",
-            overflow: "hidden",
-            boxShadow: "5px 5px 0 #0a0a0a",
-            position: "relative",
-            background: "#e8f0fe",
-          }}>
-          <img
-            src={project.image}
-            alt={project.title}
-            style={{
-              width: "100%",
-              display: "block",
-              maxHeight: "420px",
-              objectFit: "cover",
-              objectPosition: "top center",
-            }}
-            onError={(e) => {
-              e.currentTarget.parentElement.style.display = "none";
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              bottom: "12px",
-              left: "12px",
-              background: "rgba(255,255,255,0.92)",
-              border: "2px solid #0a0a0a",
-              borderRadius: "6px",
-              padding: "4px 10px",
-              fontFamily: "'Space Mono', monospace",
-              fontSize: "9px",
-              fontWeight: 700,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "#0a0a0a",
-              boxShadow: "2px 2px 0 #0a0a0a",
-            }}>
-            📸 Preview
-          </div>
-        </div>
-      )}
-
-      {/* Case study / markdown */}
+      {/* Content / markdown */}
       <div className="nb-card" style={{ marginBottom: "1rem" }}>
-        {/* Header */}
         <div
           style={{
             display: "flex",
@@ -375,12 +361,11 @@ export default function ProjectDetailPage({ slug, onBack, onNavigate }) {
               textTransform: "uppercase",
               color: "#888",
             }}>
-            // Case Study
+            // {lang === "id" ? "Tulisan" : "Writing"}
           </span>
           <LangToggle lang={lang} onChange={setLang} />
         </div>
 
-        {/* Content */}
         {loading ? (
           <p
             style={{
@@ -396,7 +381,6 @@ export default function ProjectDetailPage({ slug, onBack, onNavigate }) {
             className="proj-md"
             key={lang}
             style={{ animation: "pageFadeIn 0.2s ease" }}>
-            {/* Inline markdown styles */}
             <style>{`
               .proj-md h1 { font-size: 22px; font-weight: 700; margin: 1.4rem 0 0.7rem; border-bottom: 2px solid #e8e8e8; padding-bottom: 8px; }
               .proj-md h1:first-child { margin-top: 0; }
@@ -415,7 +399,7 @@ export default function ProjectDetailPage({ slug, onBack, onNavigate }) {
               .proj-md hr { border: none; border-top: 2px solid #e8e8e8; margin: 1.4rem 0; }
               .proj-md a { color: #4f6ef7; text-decoration: underline; text-underline-offset: 3px; }
             `}</style>
-            <ReactMarkdownWrapper content={content} />
+            {renderContentWithWidgets(content)}
           </div>
         ) : (
           <div
@@ -430,79 +414,13 @@ export default function ProjectDetailPage({ slug, onBack, onNavigate }) {
               letterSpacing: "0.1em",
             }}>
             {lang === "id"
-              ? "Belum ada writeup untuk project ini."
-              : "No writeup available yet."}
+              ? "Belum ada tulisan untuk versi bahasa ini."
+              : "No writeup available in this language yet."}
           </div>
         )}
       </div>
 
-      {/* Blog CTA */}
-      {slug === "bengkelhub" && (
-        <button
-          onClick={() =>
-            onNavigate("blog-detail", "rebuild-project-msib-bengkelhub-part1")
-          }
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: "12px",
-            width: "100%",
-            marginBottom: "1rem",
-            padding: "1rem 1.2rem",
-            background: "#f0f4ff",
-            border: "2.5px solid #0a0a0a",
-            borderRadius: "10px",
-            boxShadow: "4px 4px 0 #0a0a0a",
-            cursor: "pointer",
-            textAlign: "left",
-            fontFamily: "inherit",
-            transition: "transform 0.15s, box-shadow 0.15s",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = "translate(-2px,-2px)";
-            e.currentTarget.style.boxShadow = "6px 6px 0 #0a0a0a";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = "translate(0,0)";
-            e.currentTarget.style.boxShadow = "4px 4px 0 #0a0a0a";
-          }}>
-          <div>
-            <div
-              style={{
-                fontFamily: "'Space Mono', monospace",
-                fontSize: "9px",
-                fontWeight: 700,
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                color: "#4f6ef7",
-                marginBottom: "4px",
-              }}>
-              // Baca cerita lengkapnya
-            </div>
-            <div
-              style={{
-                fontSize: "13px",
-                fontWeight: 700,
-                color: "#0a0a0a",
-                lineHeight: 1.4,
-              }}>
-              Rebuild Project MSIB dari Nol: Cerita di Balik BengkelHub
-            </div>
-          </div>
-          <span
-            style={{
-              fontFamily: "'Space Mono', monospace",
-              fontSize: "18px",
-              color: "#4f6ef7",
-              flexShrink: 0,
-            }}>
-            →
-          </span>
-        </button>
-      )}
-
-      {/* Related projects */}
+      {/* Related posts */}
       {related.length > 0 && (
         <div>
           <div
@@ -515,13 +433,13 @@ export default function ProjectDetailPage({ slug, onBack, onNavigate }) {
               color: "#888",
               marginBottom: "12px",
             }}>
-            // Related Projects
+            // {lang === "id" ? "Tulisan Terkait" : "Related Posts"}
           </div>
-          <div className="detail-related">
+          <div className="blog-related">
             {related.map((p) => (
               <button
                 key={p.id}
-                onClick={() => onNavigate("project-detail", p.slug)}
+                onClick={() => onNavigate("blog-detail", p.slug)}
                 style={{
                   background: "#fff",
                   border: "2.5px solid #0a0a0a",
@@ -551,7 +469,7 @@ export default function ProjectDetailPage({ slug, onBack, onNavigate }) {
                     textTransform: "uppercase",
                     marginBottom: "4px",
                   }}>
-                  {p.type}
+                  {blogCategories[p.category][lang]}
                 </div>
                 <div
                   style={{
@@ -560,7 +478,7 @@ export default function ProjectDetailPage({ slug, onBack, onNavigate }) {
                     lineHeight: 1.3,
                     color: "#0a0a0a",
                   }}>
-                  {p.title}
+                  {p.title[lang] || p.title.id}
                 </div>
                 <div
                   style={{
@@ -569,7 +487,7 @@ export default function ProjectDetailPage({ slug, onBack, onNavigate }) {
                     color: "#aaa",
                     marginTop: "6px",
                   }}>
-                  {p.year} →
+                  {p.readTime} min →
                 </div>
               </button>
             ))}
@@ -577,26 +495,5 @@ export default function ProjectDetailPage({ slug, onBack, onNavigate }) {
         </div>
       )}
     </div>
-  );
-}
-
-/* Lazy-load ReactMarkdown to keep bundle clean */
-import { lazy, Suspense } from "react";
-const ReactMarkdown = lazy(() => import("react-markdown"));
-function ReactMarkdownWrapper({ content }) {
-  return (
-    <Suspense
-      fallback={
-        <p
-          style={{
-            fontFamily: "'Space Mono', monospace",
-            fontSize: "11px",
-            color: "#aaa",
-          }}>
-          Rendering…
-        </p>
-      }>
-      <ReactMarkdown>{content}</ReactMarkdown>
-    </Suspense>
   );
 }
