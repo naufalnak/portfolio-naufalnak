@@ -1,6 +1,6 @@
 # Rebuilding an MSIB Project From Scratch: The Story Behind BengkelHub
 
-> 📸 **[IMAGE 1: Screenshot/mockup of BengkelHub — operator dashboard or landing page]**
+![BengkelHub landing page](/img/blog/bengkelhub/mockup-landing.png)
 
 This isn't a tidy success story. It's about a project that fell apart, a team that scattered, and a decision to start over after everything was supposedly already done.
 
@@ -10,7 +10,7 @@ This isn't a tidy success story. It's about a project that fell apart, a team th
 
 During MSIB semester 6, I joined the Infinite Learning program, placed at Kinema Systrans Multimedia. The project: build an Android-based workshop management app called MORE (Mobile Bengkel).
 
-> 📸 **[IMAGE 2: Screenshot of the old MORE app, or GitHub commit history as visual proof]**
+![Screenshot of the old MORE app, or GitHub commit history as visual proof](/img/blog/bengkelhub/gambar2-more-app.png)
 
 Our team split into two. The Android team, which I was part of, handled the mobile app in Kotlin and Jetpack Compose. The Web team handled the backend in ExpressJS. It sounded organized. It wasn't.
 
@@ -60,7 +60,7 @@ This is the question I get asked most. Why not just stick with Node.js, which I 
 
 Honestly, I did consider Node.js with ExpressJS or Hono. I'd used both before. But a few reasons pushed me toward Go instead:
 
-> 📸 **[IMAGE 3: Architecture diagram — Next.js → Go/Fiber API → PostgreSQL, with Asynq + Redis for background jobs]**
+![BengkelHub architecture diagram: Next.js frontend, Go Fiber backend, PostgreSQL, and Asynq + Redis for background jobs](/img/blog/bengkelhub/gambar3-arsitektur.png)
 
 **Performance under concurrent load.** A busy workshop can have a lot of bookings coming in at once. Go handles concurrency with goroutines that are far lighter than Node.js threads.
 
@@ -76,7 +76,7 @@ The backend ended up on Go with Fiber as the framework, GORM for the ORM, Postgr
 
 This is one of the most consequential design decisions in BengkelHub.
 
-> 📸 **[IMAGE 4: Multi-tenant diagram — one system, multiple workshops, data isolated per workshop_id]**
+![BengkelHub multi-tenant architecture diagram: one instance serving multiple workshops, data isolated per workshop_id](/img/blog/bengkelhub/gambar4-multitenant.png)
 
 Multi-tenancy means a single application instance serves many workshops at once, but each workshop's data stays fully isolated. Workshop A's customers can't see Workshop B's data, even though they're on the same system.
 
@@ -102,7 +102,7 @@ My build speed went up significantly compared to bouncing between Stack Overflow
 
 BengkelHub is still under active development, as a multi-tenant workshop management platform with two sides:
 
-> 📸 **[IMAGE 5: Screenshot of BengkelHub — operator dashboard and customer-facing pages]**
+{{GALLERY:/img/blog/bengkelhub/gambar5-hasil.png,/img/blog/bengkelhub/gambar5-hasil-2.png,/img/blog/bengkelhub/gambar5-hasil-3.png, /img/blog/bengkelhub/gambar5-hasil-4.png}}
 
 **Workshop operators** get a dashboard to manage customers and vehicles, process services from intake to completion, auto-generate invoices with tax and discount calculations, log payments (cash, transfer, or QRIS), and receive bookings from customers.
 

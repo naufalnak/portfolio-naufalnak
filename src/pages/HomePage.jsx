@@ -2,7 +2,7 @@ import { personal, stats, projects } from "../data/portfolio";
 import DiscordStatus from "../components/DiscordStatus";
 import RoleRotator from "../components/RoleRotator";
 
-const FEATURED_SLUGS = ["BengkelHub"];
+const FEATURED_SLUGS = ["bengkelhub"];
 const PROJECT_EMOJI = {
   AI: "🍜",
   Backend: "✈️",

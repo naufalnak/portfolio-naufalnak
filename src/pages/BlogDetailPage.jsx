@@ -420,6 +420,82 @@ export default function BlogDetailPage({ slug, onBack, onNavigate }) {
         )}
       </div>
 
+      {/* Project CTA */}
+      {(slug === "rebuild-project-msib-bengkelhub-part1" ||
+        slug === "blog-part2-bengkelhub") && (
+        <button
+          onClick={() => onNavigate("project-detail", "bengkelhub")}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "12px",
+            width: "100%",
+            marginTop: "1.5rem",
+            marginBottom: "1rem",
+            padding: "1rem 1.2rem",
+            background: "#f0f4ff",
+            border: "2.5px solid #0a0a0a",
+            borderRadius: "10px",
+            boxShadow: "4px 4px 0 #0a0a0a",
+            cursor: "pointer",
+            textAlign: "left",
+            fontFamily: "inherit",
+            transition: "transform 0.15s, box-shadow 0.15s",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translate(-2px,-2px)";
+            e.currentTarget.style.boxShadow = "6px 6px 0 #0a0a0a";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "translate(0,0)";
+            e.currentTarget.style.boxShadow = "4px 4px 0 #0a0a0a";
+          }}>
+          <div>
+            <div
+              style={{
+                fontFamily: "'Space Mono', monospace",
+                fontSize: "9px",
+                fontWeight: 700,
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                color: "#4f6ef7",
+                marginBottom: "4px",
+              }}>
+              // {lang === "id" ? "Lihat project-nya" : "See the project"}
+            </div>
+            <div
+              style={{
+                fontSize: "13px",
+                fontWeight: 700,
+                color: "#0a0a0a",
+                lineHeight: 1.4,
+              }}>
+              BengkelHub
+              <span
+                style={{
+                  fontWeight: 400,
+                  color: "#5b5f77",
+                  marginLeft: "6px",
+                }}>
+                {lang === "id"
+                  ? "· tech stack, fitur, dan demo lengkapnya"
+                  : "· full tech stack, features, and demo"}
+              </span>
+            </div>
+          </div>
+          <span
+            style={{
+              fontFamily: "'Space Mono', monospace",
+              fontSize: "18px",
+              color: "#4f6ef7",
+              flexShrink: 0,
+            }}>
+            →
+          </span>
+        </button>
+      )}
+
       {/* Related posts */}
       {related.length > 0 && (
         <div>
