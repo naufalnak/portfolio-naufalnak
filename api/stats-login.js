@@ -68,9 +68,11 @@ export default async function handler(req, res) {
   // Secure -> cuma dikirim lewat HTTPS
   // SameSite=Lax -> tetap kekirim pas navigasi langsung ke domain sendiri
   // Max-Age 180 hari -> nggak perlu login ulang tiap kali
+  // Domain=naufalandr.my.id -> cookie berlaku baik di www.naufalandr.my.id
+  // maupun naufalandr.my.id polos, nggak cuma host yang persis dipakai login
   res.setHeader(
     "Set-Cookie",
-    `stats_auth=${token}; HttpOnly; Secure; SameSite=Lax; Max-Age=15552000; Path=/`,
+    `stats_auth=${token}; Domain=naufalandr.my.id; HttpOnly; Secure; SameSite=Lax; Max-Age=15552000; Path=/`,
   );
 
   return res.status(200).json({ ok: true });
