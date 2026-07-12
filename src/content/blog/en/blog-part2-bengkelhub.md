@@ -1,7 +1,5 @@
 # Three Bugs That Almost Shipped to Production: Technical Stories From BengkelHub
 
-> 📸 **[IMAGE 1: Screenshot of code or terminal — or a diagram of the booking-to-Service conversion flow]**
-
 In _Part 1_, I wrote about why BengkelHub came out of rebuilding a messy MSIB project, and why I chose Go, Fiber, and a multi-tenant architecture for the new version.
 
 This part gets more technical. Three bugs that looked small at first, but if left unnoticed, could have led to much more serious problems: service history bleeding into the wrong person, everyone failing to register, and WhatsApp notifications silently failing with no one knowing why.
@@ -11,8 +9,6 @@ This part gets more technical. Three bugs that looked small at first, but if lef
 ## Bug #1: Matching by License Plate Alone Is Dangerous
 
 BengkelHub has two paths for customers to enter the system: online booking through the app, and walk-ins who show up directly at the workshop. Both have to end up as the same kind of data: one `Customer`, one `Vehicle`, one `Service`.
-
-> 📸 **[IMAGE 2: Screenshot of the "Convert to Service" page, or a diagram of the booking → Customer/Vehicle/Service flow]**
 
 When I built the "Convert to Service" feature (turning an online booking into an internal service record), the logic seemed simple: look up the vehicle by license plate within that workshop. If it exists, use it. If not, create a new one.
 
@@ -39,8 +35,6 @@ The trade-off is that there can now be two vehicle records with the same plate u
 ## Bug #2: A Phone Number Validation Change That Nearly Locked Everyone Out of Signup
 
 BengkelHub's philosophy is simple: customers fill in their own data through booking, operators just process it. For that to actually work, a customer's phone number has to be present, since it's used both for WhatsApp notifications and for converting a booking into a service.
-
-> 📸 **[IMAGE 3: Screenshot of the registration form or a phone number validation error]**
 
 I changed the backend validation from optional to required:
 
@@ -80,7 +74,7 @@ Same bug, same fix, but only stuck to half the places it was supposed to. A remi
 
 WhatsApp notifications in BengkelHub run through Fonnte, and for scheduled booking reminders, I used Asynq (a Redis-backed job queue) so the process runs in the background, separate from the main request.
 
-> 📸 **[IMAGE 4: Asynq worker diagram — enqueue task → Redis → separate worker → Fonnte API]**
+![Diagram of the background job flow: a new booking enqueues an Asynq task, stored in Redis, picked up by a separate worker, which then calls the Fonnte API to send WhatsApp, with automatic retry on failure](/img/blog/bengkelhub/gambar4-asynq-fonnte.png)
 
 Roughly how it works: the moment a new booking comes in, I enqueue a task to Asynq with a scheduled execution time (say, a day before the service appointment). The Asynq worker runs as a separate process, pulls the task from Redis once its time arrives, and only then calls Fonnte to send the WhatsApp message. If it fails, Asynq automatically retries based on its configuration, without me having to build retry logic myself.
 

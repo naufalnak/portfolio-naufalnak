@@ -1,7 +1,5 @@
 # Tiga Bug yang Hampir Lolos ke Production: Cerita Teknis di Balik BengkelHub
 
-> 📸 **[GAMBAR 1: Screenshot kode atau terminal — bisa diagram alur convert booking jadi Service]**
-
 Di _Part 1_, saya cerita soal kenapa BengkelHub lahir dari rebuild project MSIB yang berantakan, dan kenapa saya pilih Go, Fiber, dan arsitektur multi-tenant buat versi barunya.
 
 Part ini lebih teknis. Tiga bug yang kelihatannya kecil di awal, tapi kalau kelewatan, bisa berujung ke masalah yang jauh lebih serius: riwayat servis yang nyasar ke orang lain, semua orang gagal daftar akun, dan notifikasi WhatsApp yang diam-diam gagal terkirim tanpa ada yang tahu kenapa.
@@ -11,8 +9,6 @@ Part ini lebih teknis. Tiga bug yang kelihatannya kecil di awal, tapi kalau kele
 ## Bug #1: Pencocokan Plat Nomor Doang Itu Berbahaya
 
 BengkelHub punya dua jalur customer masuk: booking online lewat aplikasi, dan walk-in yang datang langsung ke bengkel. Dua-duanya harus berujung jadi data yang sama: satu `Customer`, satu `Vehicle`, satu `Service`.
-
-> 📸 **[GAMBAR 2: Screenshot halaman "Proses jadi Servis" atau diagram alur booking → Customer/Vehicle/Service]**
 
 Waktu saya bikin fitur "Proses jadi Servis" (konversi booking online jadi record servis internal), logikanya kelihatan sederhana: cari kendaraan berdasarkan plat nomor di workshop itu. Kalau sudah ada, pakai yang lama. Kalau belum, bikin baru.
 
@@ -39,8 +35,6 @@ Konsekuensinya, sekarang mungkin ada dua record kendaraan dengan plat yang sama 
 ## Bug #2: Validasi Nomor HP yang Nyaris Bikin Semua Orang Gagal Daftar
 
 Filosofi BengkelHub sederhana: customer isi data sendiri lewat booking, operator tinggal proses. Supaya ini beneran jalan, nomor HP customer wajib ada, karena dipakai buat kirim notifikasi WhatsApp dan buat konversi booking jadi servis.
-
-> 📸 **[GAMBAR 3: Screenshot form register atau error validasi nomor HP]**
 
 Saya ubah validasi backend dari opsional jadi wajib:
 
@@ -80,7 +74,7 @@ Bug yang sama, fix yang sama, tapi ketempel cuma di setengah tempat yang seharus
 
 Notifikasi WhatsApp di BengkelHub jalan lewat Fonnte, dan buat reminder booking yang terjadwal, saya pakai Asynq (Redis-backed job queue) supaya prosesnya jalan di background, terpisah dari request utama.
 
-> 📸 **[GAMBAR 4: Diagram Asynq worker — enqueue task → Redis → worker terpisah → Fonnte API]**
+![Diagram alur background job: booking baru masuk ke Asynq, disimpan di Redis, diambil worker terpisah, lalu memanggil Fonnte API untuk kirim WhatsApp, dengan retry otomatis kalau gagal](/img/blog/bengkelhub/gambar4-asynq-fonnte.png)
 
 Cara kerjanya kira-kira begini: begitu ada booking baru, saya enqueue task ke Asynq dengan waktu eksekusi terjadwal (misal, sehari sebelum jadwal servis). Worker Asynq jalan sebagai proses terpisah, ambil task dari Redis begitu waktunya tiba, dan baru dari situ manggil Fonnte buat kirim WhatsApp. Kalau gagal, Asynq otomatis retry sesuai konfigurasi, tanpa saya perlu bikin sendiri logika retry-nya.
 
