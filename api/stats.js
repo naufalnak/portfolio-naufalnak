@@ -1,15 +1,32 @@
+import crypto from "node:crypto";
+
 /**
- * GET /api/stats?secret=YOUR_SECRET
- * atau header: x-admin-secret: YOUR_SECRET
+ * GET /api/stats
  *
- * Cuma buat kamu sendiri. Balikin jumlah unique visitor & total klik
- * per blog post, diurutkan dari yang paling banyak dilihat.
+ * Diautentikasi lewat cookie httpOnly `stats_auth` (di-set oleh
+ * /api/stats-login setelah secret dicocokkan). Browser ngirim cookie ini
+ * otomatis, jadi frontend nggak perlu simpen/kirim secret sama sekali.
+ *
+ * Balikin per blog post: uniqueVisitors, totalClicks, dan daftar visitor
+ * (fingerprint anonim, firstSeen, lastSeen, hits). Fingerprint BUKAN IP
+ * asli, cuma hash -- cukup buat mastiin "ini beneran 2 orang berbeda"
+ * tanpa nyimpen data pribadi pengunjung.
  */
 export default async function handler(req, res) {
   const ADMIN_SECRET = process.env.ADMIN_SECRET;
-  const provided = req.headers["x-admin-secret"] || req.query.secret;
+  if (!ADMIN_SECRET) {
+    return res.status(200).json({ error: "not_configured", data: [] });
+  }
 
-  if (!ADMIN_SECRET || !provided || provided !== ADMIN_SECRET) {
+  const cookieHeader = req.headers.cookie || "";
+  const match = cookieHeader.match(/(?:^|;\s*)stats_auth=([^;]+)/);
+  const cookieValue = match ? match[1] : null;
+  const expectedToken = crypto
+    .createHash("sha256")
+    .update(`${ADMIN_SECRET}:stats-cookie`)
+    .digest("hex");
+
+  if (cookieValue !== expectedToken) {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
@@ -31,22 +48,50 @@ export default async function handler(req, res) {
       return res.status(200).json({ data: [] });
     }
 
-    const uniqueRes = await upstash(UPSTASH_URL, UPSTASH_TOKEN, [
-      "MGET",
-      ...slugs.map((s) => `blogclick:unique:${s}`),
-    ]);
-    const totalRes = await upstash(UPSTASH_URL, UPSTASH_TOKEN, [
-      "MGET",
-      ...slugs.map((s) => `blogclick:total:${s}`),
-    ]);
+    const data = [];
 
-    const data = slugs
-      .map((slug, i) => ({
+    for (const slug of slugs) {
+      const totalRes = await upstash(UPSTASH_URL, UPSTASH_TOKEN, [
+        "GET",
+        `blogclick:total:${slug}`,
+      ]);
+      const fpRes = await upstash(UPSTASH_URL, UPSTASH_TOKEN, [
+        "SMEMBERS",
+        `blogclick:visitors:${slug}`,
+      ]);
+      const fingerprints = fpRes.result || [];
+
+      let visitors = [];
+      if (fingerprints.length > 0) {
+        const recordsRes = await upstash(UPSTASH_URL, UPSTASH_TOKEN, [
+          "MGET",
+          ...fingerprints.map((fp) => `blogclick:visitor:${slug}:${fp}`),
+        ]);
+        visitors = fingerprints
+          .map((fp, i) => {
+            const raw = recordsRes.result?.[i];
+            if (!raw) return null;
+            const parsed = JSON.parse(raw);
+            return {
+              visitorId: fp.slice(0, 10),
+              firstSeen: parsed.firstSeen,
+              lastSeen: parsed.lastSeen,
+              hits: parsed.hits,
+            };
+          })
+          .filter(Boolean)
+          .sort((a, b) => new Date(b.lastSeen) - new Date(a.lastSeen));
+      }
+
+      data.push({
         slug,
-        uniqueVisitors: Number(uniqueRes.result?.[i] || 0),
-        totalClicks: Number(totalRes.result?.[i] || 0),
-      }))
-      .sort((a, b) => b.uniqueVisitors - a.uniqueVisitors);
+        uniqueVisitors: fingerprints.length,
+        totalClicks: Number(totalRes.result || 0),
+        visitors,
+      });
+    }
+
+    data.sort((a, b) => b.uniqueVisitors - a.uniqueVisitors);
 
     return res.status(200).json({ data });
   } catch (err) {
