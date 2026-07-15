@@ -98,7 +98,7 @@ export const projects = [
     image: "/projects/flight.png",
   },
   {
-    id: 6,
+    id: 7,
     slug: "bengkelhub",
     year: "2026",
     title: "BengkelHub",
@@ -106,12 +106,12 @@ export const projects = [
     tags: ["Next.js 15", "TypeScript", "Prisma", "Supabase", "NextAuth"],
     type: "Full Stack",
     link: "https://bengkelhub.naufalandr.my.id/",
-    repo: "https://github.com/naufalnak/saas-workshop",
+    repo: "#",
     featured: true,
     image: "/projects/bengkelhub.png",
   },
   {
-    id: 7,
+    id: 6,
     slug: "jasa-content-writing",
     year: "2025",
     title: "Jasa Content Writing",
