@@ -37,7 +37,7 @@
     "tags": ["Go", "Fiber", "Next.js 16", "TypeScript", "PostgreSQL"],
     "type": "Full Stack",
     "link": "https://BengkelHub.naufalandr.my.id/",
-    "repo": "https://github.com/naufalnak/saas-workshop",
+    "repo": "https://github.com/naufalnak/bengkelhub-web",
     "featured": true,
     "image": "/projects/bengkelhub.png"
   },

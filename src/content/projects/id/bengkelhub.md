@@ -1,6 +1,6 @@
 # Overview
 
-ServisYuk adalah platform manajemen bengkel kendaraan multi-tenant, evolusi dari project mobile **MORE (MoBo Repair)** yang saya rebuild secara penuh sebagai web platform setelah lulus kuliah.
+BengkelHub adalah platform manajemen bengkel kendaraan multi-tenant, evolusi dari project mobile **MORE (MoBo Repair)** yang saya rebuild secara penuh sebagai web platform setelah lulus kuliah.
 
 Platform ini dirancang sebagai tiga-sisi: **marketplace publik** untuk pelanggan mencari bengkel, **portal pelanggan** untuk booking dan tracking servis, dan **dashboard operator** untuk pengelolaan bengkel secara menyeluruh.
 
@@ -30,7 +30,7 @@ Tantangannya: membangun sistem multi-tenant dari nol, di mana setiap data harus 
 - **UI**: Radix UI / shadcn, Tailwind CSS v4, Framer Motion
 - **PDF**: @react-pdf/renderer (invoice)
 
-**Deployment**: Vercel (frontend), Render (backend)
+**Deployment**: Vercel (frontend), backend masih dijalankan secara lokal via ngrok untuk sementara, rencana deploy ke VPS/Render sebagai langkah berikutnya
 
 # Architecture Highlights
 
