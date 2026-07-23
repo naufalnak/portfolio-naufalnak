@@ -13,7 +13,7 @@ export const personal = {
     "Specializing in RESTful API development with Node.js and Express.js, Android mobile development using Kotlin and Jetpack Compose, and UI/UX design. I care deeply about code quality, structured architecture, and building technology solutions that make a real impact.",
   availability: true,
   resumeUrl:
-    "https://drive.google.com/file/d/1-FO-in0keMau3afb8fMK9VV2r23PFR0J/view?usp=drive_link",
+    "https://drive.google.com/file/d/1gCmO1_F8REvMU2fFUQKAqgUvidMl1opS/view?usp=drive_link",
   yearStarted: 2021,
 };
 
