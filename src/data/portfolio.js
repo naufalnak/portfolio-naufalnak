@@ -8,9 +8,9 @@ export const personal = {
   github: "naufalnak",
   linkedin: "naufalandr",
   twitter: "#",
-  bio: "Informatics graduate with a focus on web and mobile development. Experienced in building backend systems and RESTful APIs, with hands-on exposure to Android development and UI/UX design.",
+  bio: "Informatics graduate from Gunadarma University (GPA 3.85/4.00) with hands-on experience across backend, mobile, and full-stack development. Proficient in building RESTful APIs and modular backend architectures using Node.js, Go, and Java, with working knowledge of relational databases and caching layers.",
   bioExtended:
-    "Specializing in RESTful API development with Node.js and Express.js, Android mobile development using Kotlin and Jetpack Compose, and UI/UX design. I care deeply about code quality, structured architecture, and building technology solutions that make a real impact.",
+    "Experienced in cross-functional team collaboration, structured development workflows (SDLC), and applying analytical problem-solving to deliver scalable, production-ready technology solutions.",
   availability: true,
   resumeUrl:
     "https://drive.google.com/file/d/1PpgKKpNEFVieh_HQn4geg2Acwrfkx8hJ/view?usp=drive_link",
@@ -32,13 +32,17 @@ export const skills = [
       "Express.js",
       "Go",
       "Go Fiber",
+      "Java",
+      "Spring Boot",
       "REST API",
-      "PostgreSQL",
-      "Prisma ORM",
-      "Redis",
       "PHP",
+      "CodeIgniter",
       "Laravel",
     ],
+  },
+  {
+    category: "Database & Caching",
+    items: ["PostgreSQL", "MySQL", "Prisma ORM", "GORM", "Redis"],
   },
   {
     category: "Mobile",
@@ -57,15 +61,23 @@ export const skills = [
     ],
   },
   {
-    category: "Tools & Design",
+    category: "Testing & QA",
+    items: ["Vitest", "Unit Testing", "Mocking", "Joi Validation"],
+  },
+  {
+    category: "Methodologies",
+    items: ["SDLC (Waterfall)", "CRISP-DM"],
+  },
+  {
+    category: "Tools & Cloud",
     items: [
       "Git",
       "Postman",
       "Figma",
-      "Vitest",
       "Bootstrap",
-      "SQL",
+      "Vercel",
       "AWS Cloud",
+      "GCP",
     ],
   },
 ];
@@ -217,7 +229,7 @@ export const experience = [
     period: "Sept 2021 — Sept 2025",
     role: "B.Eng. in Informatics",
     company: "Universitas Gunadarma",
-    desc: "Bachelor of Engineering in Informatics with a cumulative GPA of 3.85/4.00 as of Semester 8. Served as Lab Assistant in charge of Algorithm and Programming practicum for 2 semesters using Python, and contributed to the development of practicum materials.",
+    desc: "Bachelor of Engineering in Informatics with a cumulative GPA of 3.85/4.00 as of Semester 8. Served as Lab Assistant in charge of Algorithm and Programming practicum for 2 semesters using Python, and contributed to the development of practicum materials. Beyond coursework, gained hands-on mentoring experience as a Computer Laboratory Assistant and broadened technical exposure through the Google Developer Student Clubs (GDSC) community, building a strong foundation in teamwork, problem-solving, and structured technology-based solutions.",
     stack: [],
     type: "edu",
   },
@@ -232,5 +244,36 @@ export const certifications = [
     credentialNo: "62019 2514 5 0019419 2025",
     valid: "Valid until Jun 2028",
     tags: ["PHP", "CodeIgniter 3", "MySQL", "Web Programming"],
+  },
+];
+
+export const trainings = [
+  {
+    id: 1,
+    period: "2024",
+    title: "Pemrograman Java (J2SE) — Tingkat Menengah",
+    issuer: "Lepkom Universitas Gunadarma",
+    tags: ["Java", "J2SE"],
+  },
+  {
+    id: 2,
+    period: "2023 — 2024",
+    title: "Pemrograman Go — Tingkat Menengah",
+    issuer: "Lepkom Universitas Gunadarma",
+    tags: ["Go"],
+  },
+  {
+    id: 3,
+    period: "2023",
+    title: "Pemrograman Java (J2SE) — Tingkat Pemula",
+    issuer: "Lepkom Universitas Gunadarma",
+    tags: ["Java", "J2SE"],
+  },
+  {
+    id: 4,
+    period: "2022 — 2023",
+    title: "Pemrograman Go — Tingkat Pemula",
+    issuer: "Lepkom Universitas Gunadarma",
+    tags: ["Go"],
   },
 ];

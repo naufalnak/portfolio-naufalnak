@@ -4,6 +4,7 @@ import {
   skills,
   experience,
   certifications,
+  trainings,
 } from "../data/portfolio";
 import foto from "../assets/me.png";
 
@@ -26,11 +27,16 @@ const DEVICON = {
   "Express.js": "devicon-express-original",
   Go: "devicon-go-original colored",
   "Go Fiber": "devicon-go-original colored",
+  Java: "devicon-java-plain colored",
+  "Spring Boot": "devicon-spring-plain colored",
   "REST API": "devicon-fastapi-plain colored",
   PostgreSQL: "devicon-postgresql-plain colored",
+  MySQL: "devicon-mysql-plain colored",
   "Prisma ORM": "devicon-prisma-original",
+  GORM: "devicon-go-original colored",
   Redis: "devicon-redis-plain colored",
   PHP: "devicon-php-plain colored",
+  CodeIgniter: "devicon-codeigniter-plain colored",
   Laravel: "devicon-laravel-plain colored",
   Kotlin: "devicon-kotlin-plain colored",
   "Android Studio": "devicon-androidstudio-plain colored",
@@ -43,13 +49,14 @@ const DEVICON = {
   HTML: "devicon-html5-plain colored",
   CSS: "devicon-css3-plain colored",
   "Tailwind CSS": "devicon-tailwindcss-plain colored",
+  Vitest: "devicon-vitest-plain colored",
   Git: "devicon-git-plain colored",
   Postman: "devicon-postman-plain colored",
   Figma: "devicon-figma-plain colored",
-  Vitest: "devicon-vitest-plain colored",
   Bootstrap: "devicon-bootstrap-plain colored",
-  SQL: "devicon-azuresqldatabase-plain",
+  Vercel: "devicon-vercel-original",
   "AWS Cloud": "devicon-amazonwebservices-plain-wordmark colored",
+  GCP: "devicon-googlecloud-plain colored",
 };
 
 const education = experience.filter((e) => e.type === "edu");
@@ -309,7 +316,7 @@ export default function SkillsPage() {
             marginBottom: "1rem",
             flexWrap: "wrap",
           }}>
-          {["education", "certification"].map((t) => (
+          {["education", "certification", "training"].map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
@@ -329,7 +336,11 @@ export default function SkillsPage() {
                   tab === t ? "2px 2px 0 #0a0a0a" : "2px 2px 0 #d0d0d0",
                 transition: "all 0.15s",
               }}>
-              {t === "education" ? "🎓 Education" : "🏅 Certification"}
+              {t === "education"
+                ? "🎓 Education"
+                : t === "certification"
+                  ? "🏅 Certification"
+                  : "📚 Training"}
             </button>
           ))}
         </div>
@@ -412,7 +423,7 @@ export default function SkillsPage() {
                 </div>
               ))}
             </div>
-          ) : (
+          ) : tab === "certification" ? (
             <div
               style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
               {certifications.map((cert) => (
@@ -485,6 +496,73 @@ export default function SkillsPage() {
                     </div>
                   </div>
                   <div style={{ fontSize: "36px", flexShrink: 0 }}>🏅</div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              {trainings.map((tr) => (
+                <div
+                  key={tr.id}
+                  style={{
+                    background: "#fff",
+                    border: "2px solid #e8e8e8",
+                    borderRadius: "10px",
+                    padding: "1rem 1.2rem",
+                    display: "flex",
+                    alignItems: "flex-start",
+                    justifyContent: "space-between",
+                    gap: "12px",
+                  }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div
+                      style={{
+                        fontFamily: "'Space Mono', monospace",
+                        fontSize: "9px",
+                        fontWeight: 700,
+                        letterSpacing: "0.1em",
+                        textTransform: "uppercase",
+                        color: "#4f6ef7",
+                        marginBottom: "4px",
+                      }}>
+                      {tr.period}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "15px",
+                        fontWeight: 700,
+                        color: "#0a0a0a",
+                      }}>
+                      {tr.title}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "12px",
+                        color: "#4f6ef7",
+                        fontWeight: 600,
+                        marginTop: "2px",
+                      }}>
+                      {tr.issuer}
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: "4px",
+                        marginTop: "8px",
+                      }}>
+                      {tr.tags.map((t) => (
+                        <span
+                          key={t}
+                          className="nb-tag"
+                          style={{ fontSize: "9px" }}>
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div style={{ fontSize: "36px", flexShrink: 0 }}>📚</div>
                 </div>
               ))}
             </div>
