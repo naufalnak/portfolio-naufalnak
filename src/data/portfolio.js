@@ -13,7 +13,7 @@ export const personal = {
     "Experienced in cross-functional team collaboration, structured development workflows (SDLC), and applying analytical problem-solving to deliver scalable, production-ready technology solutions.",
   availability: true,
   resumeUrl:
-    "https://drive.google.com/file/d/1PpgKKpNEFVieh_HQn4geg2Acwrfkx8hJ/view?usp=drive_link",
+    "https://drive.google.com/file/d/1lO9lRzJoDhYwnLLfPAahARv98AD9pQ1q/view?usp=drive_link",
   yearStarted: 2021,
 };
 
