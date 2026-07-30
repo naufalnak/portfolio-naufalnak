@@ -1,3 +1,9 @@
+import certBnsp from "../assets/document/sertifikat-bnsp.pdf";
+import javaIntermediatePdf from "../assets/document/java-for-intermediate.pdf";
+import goMenengahPdf from "../assets/document/golang-for-intermediate.pdf";
+import javaPemulaPdf from "../assets/document/java-for-beginner.pdf";
+import goPemulaPdf from "../assets/document/golang-for-beginner.pdf";
+
 export const personal = {
   name: "Naufal Andresya Kholish",
   firstName: "Naufal",
@@ -257,6 +263,7 @@ export const certifications = [
     credentialNo: "62019 2514 5 0019419 2025",
     valid: "Valid until Jun 2028",
     tags: ["PHP", "CodeIgniter 3", "MySQL", "Web Programming"],
+    proof: certBnsp,
   },
 ];
 
@@ -267,6 +274,7 @@ export const trainings = [
     title: "Pemrograman Java (J2SE) — Tingkat Menengah",
     issuer: "Lepkom Universitas Gunadarma",
     tags: ["Java", "J2SE"],
+    proof: javaIntermediatePdf,
   },
   {
     id: 2,
@@ -274,6 +282,7 @@ export const trainings = [
     title: "Pemrograman Go — Tingkat Menengah",
     issuer: "Lepkom Universitas Gunadarma",
     tags: ["Go"],
+    proof: goMenengahPdf,
   },
   {
     id: 3,
@@ -281,6 +290,7 @@ export const trainings = [
     title: "Pemrograman Java (J2SE) — Tingkat Pemula",
     issuer: "Lepkom Universitas Gunadarma",
     tags: ["Java", "J2SE"],
+    proof: javaPemulaPdf,
   },
   {
     id: 4,
@@ -288,5 +298,6 @@ export const trainings = [
     title: "Pemrograman Go — Tingkat Pemula",
     issuer: "Lepkom Universitas Gunadarma",
     tags: ["Go"],
+    proof: goPemulaPdf,
   },
 ];
