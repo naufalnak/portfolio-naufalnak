@@ -21,7 +21,7 @@ export default function MusicPlayer() {
   const [playing, setPlaying] = useState(false);
   const [current, setCurrent] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [volume, setVolume] = useState(0.7);
+  const [volume, setVolume] = useState(0.2);
   const [started, setStarted] = useState(false); // has user interacted?
   const audioRef = useRef(null);
 
