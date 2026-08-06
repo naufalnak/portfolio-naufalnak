@@ -3,6 +3,10 @@ import javaIntermediatePdf from "../assets/document/java-for-intermediate.pdf";
 import goMenengahPdf from "../assets/document/golang-for-intermediate.pdf";
 import javaPemulaPdf from "../assets/document/java-for-beginner.pdf";
 import goPemulaPdf from "../assets/document/golang-for-beginner.pdf";
+import basicWebAppDesignPdf from "../assets/document/basic-web-application-design.pdf";
+import buildingWebsiteHtml5Pdf from "../assets/document/building-website-html5.pdf";
+import fundamentalDesktopPdf from "../assets/document/fundamental-desktop-programming.pdf";
+import fundamentalWebPdf from "../assets/document/fundamental-web-programming.pdf";
 
 export const personal = {
   name: "Naufal Andresya Kholish",
@@ -19,12 +23,15 @@ export const personal = {
     "Experienced in cross-functional team collaboration, structured development workflows (SDLC), and applying analytical problem-solving to deliver scalable, production-ready technology solutions.",
   availability: true,
   resumeUrl:
-    "https://drive.google.com/file/d/1ehSgAR3ofas5uPGda3fpZ-BzaIGhDNS5/view?usp=drive_link",
+    "https://drive.google.com/file/d/16sePkEyyeoKz-ZRsBbvg9qOclUZzsmTR/view?usp=drive_link",
   yearStarted: 2021,
 };
 
 export const stats = [
-  { value: "3+", label: "Years" },
+  {
+    value: `4`,
+    label: "Years in Programming",
+  },
   { value: "10+", label: "Projects" },
   { value: "3.85", label: "GPA" },
   { value: "4", label: "Experience" },
@@ -271,13 +278,21 @@ export const trainings = [
   {
     id: 1,
     period: "2024",
+    title: "Dasar Perancangan Aplikasi Web",
+    issuer: "Universitas Gunadarma",
+    tags: ["PHP", "XAMPP"],
+    proof: basicWebAppDesignPdf,
+  },
+  {
+    id: 2,
+    period: "2024",
     title: "Pemrograman Java (J2SE) — Tingkat Menengah",
     issuer: "Lepkom Universitas Gunadarma",
     tags: ["Java", "J2SE"],
     proof: javaIntermediatePdf,
   },
   {
-    id: 2,
+    id: 3,
     period: "2023 — 2024",
     title: "Pemrograman Go — Tingkat Menengah",
     issuer: "Lepkom Universitas Gunadarma",
@@ -285,7 +300,15 @@ export const trainings = [
     proof: goMenengahPdf,
   },
   {
-    id: 3,
+    id: 4,
+    period: "2023",
+    title: "Membangun Website Menggunakan HTML 5",
+    issuer: "Universitas Gunadarma",
+    tags: ["HTML5"],
+    proof: buildingWebsiteHtml5Pdf,
+  },
+  {
+    id: 5,
     period: "2023",
     title: "Pemrograman Java (J2SE) — Tingkat Pemula",
     issuer: "Lepkom Universitas Gunadarma",
@@ -293,11 +316,27 @@ export const trainings = [
     proof: javaPemulaPdf,
   },
   {
-    id: 4,
+    id: 6,
     period: "2022 — 2023",
     title: "Pemrograman Go — Tingkat Pemula",
     issuer: "Lepkom Universitas Gunadarma",
     tags: ["Go"],
     proof: goPemulaPdf,
+  },
+  {
+    id: 7,
+    period: "2022",
+    title: "Dasar Pemrograman Berbasis Desktop",
+    issuer: "Universitas Gunadarma",
+    tags: ["Delphi", ".NET"],
+    proof: fundamentalDesktopPdf,
+  },
+  {
+    id: 8,
+    period: "2022",
+    title: "Dasar Pemrograman Berbasis Web",
+    issuer: "Universitas Gunadarma",
+    tags: ["Go", "J2EE"],
+    proof: fundamentalWebPdf,
   },
 ];

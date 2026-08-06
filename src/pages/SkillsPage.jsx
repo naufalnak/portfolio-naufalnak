@@ -67,6 +67,13 @@ const DEVICON = {
 
 const education = experience.filter((e) => e.type === "edu");
 
+/* watermark diagonal berulang di atas preview dokumen, nyegah reuse bebas */
+const WATERMARK_SVG = `<svg xmlns='http://www.w3.org/2000/svg' width='340' height='200'>
+  <text x='170' y='90' transform='rotate(-30 170 90)' text-anchor='middle' font-family='Space Mono, monospace' font-size='15' font-weight='700' fill='rgba(10,10,10,0.14)'>NAUFAL ANDRESYA KHOLISH</text>
+  <text x='170' y='130' transform='rotate(-30 170 130)' text-anchor='middle' font-family='Space Mono, monospace' font-size='10' font-weight='700' letter-spacing='1' fill='rgba(10,10,10,0.14)'>VERIFIED COPY · NAUFALANDR.MY.ID</text>
+</svg>`;
+const WATERMARK_BG = `url("data:image/svg+xml,${encodeURIComponent(WATERMARK_SVG)}")`;
+
 export default function SkillsPage() {
   const [tab, setTab] = useState("education");
   const [previewDoc, setPreviewDoc] = useState(null);
@@ -598,7 +605,15 @@ export default function SkillsPage() {
             </div>
           ) : (
             <div
-              style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              className="nb-scroll"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "8px",
+                maxHeight: "560px",
+                overflowY: "auto",
+                paddingRight: "6px",
+              }}>
               {trainings.map((tr) => (
                 <div
                   key={tr.id}
@@ -858,32 +873,44 @@ export default function SkillsPage() {
                 justifyContent: "center",
                 padding: "16px",
               }}>
-              <Document
-                file={previewDoc.url}
-                onLoadSuccess={({ numPages }) => setNumPages(numPages)}
-                onLoadError={(err) => console.error("PDF load error:", err)}
-                loading={
-                  <div
-                    style={{
-                      color: "#fff",
-                      fontFamily: "'Space Mono', monospace",
-                      fontSize: "12px",
-                    }}>
-                    Loading...
-                  </div>
-                }
-                error={
-                  <div
-                    style={{
-                      color: "#fff",
-                      fontFamily: "'Space Mono', monospace",
-                      fontSize: "12px",
-                    }}>
-                    Gagal load dokumen.
-                  </div>
-                }>
-                <Page pageNumber={pageNumber} width={720} />
-              </Document>
+              <div style={{ position: "relative", display: "inline-block" }}>
+                <Document
+                  file={previewDoc.url}
+                  onLoadSuccess={({ numPages }) => setNumPages(numPages)}
+                  onLoadError={(err) => console.error("PDF load error:", err)}
+                  loading={
+                    <div
+                      style={{
+                        color: "#fff",
+                        fontFamily: "'Space Mono', monospace",
+                        fontSize: "12px",
+                      }}>
+                      Loading...
+                    </div>
+                  }
+                  error={
+                    <div
+                      style={{
+                        color: "#fff",
+                        fontFamily: "'Space Mono', monospace",
+                        fontSize: "12px",
+                      }}>
+                      Gagal load dokumen.
+                    </div>
+                  }>
+                  <Page pageNumber={pageNumber} width={720} />
+                </Document>
+                <div
+                  aria-hidden="true"
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    pointerEvents: "none",
+                    backgroundImage: WATERMARK_BG,
+                    backgroundRepeat: "repeat",
+                  }}
+                />
+              </div>
             </div>
 
             {numPages > 1 && (

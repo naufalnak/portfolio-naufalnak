@@ -2,9 +2,9 @@ import { useState, useRef, useEffect } from "react";
 
 // ── Ganti dengan file MP3 kamu di public/music/ ──
 const TRACK = {
-  title: "Lofi Yorushika",
-  artist: "Yorushika",
-  src: "/music/lofi-yorushika.mp3",
+  title: "Color Your Night",
+  artist: "Lotus Juice",
+  src: "/music/color-your-night.mp3",
 };
 
 function formatTime(s) {
@@ -21,7 +21,7 @@ export default function MusicPlayer() {
   const [playing, setPlaying] = useState(false);
   const [current, setCurrent] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [volume, setVolume] = useState(0.2);
+  const [volume, setVolume] = useState(0.1);
   const [started, setStarted] = useState(false); // has user interacted?
   const audioRef = useRef(null);
 

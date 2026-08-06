@@ -10,6 +10,22 @@ export const blogCategoryEmoji = {
 
 export const blogPosts = [
   {
+    id: 4,
+    slug: "di-balik-layar-skripsi-mobilenetv2",
+    date: "2026-08-06", // sesuaikan tanggal publish
+    category: "keluh-kesah", // atau "edukasi", sesuaikan selera
+    tags: ["MobileNetV2", "Transfer Learning", "CNN", "Skripsi", "Python"],
+    readTime: 6,
+    title: {
+      id: "Di Balik Layar Skripsi: Membangun Chatbot Pengenalan Makanan Khas Indonesia dengan MobileNetV2",
+      en: "Behind the Thesis: Building an Indonesian Food Recognition Chatbot with MobileNetV2",
+    },
+    excerpt: {
+      id: "Dataset yang tidak seimbang, overfitting yang susah dihindari, dan makanan yang saling tertukar karena kemiripan visual. Cerita di balik angka akurasi 80% di paper.",
+      en: "An imbalanced dataset, overfitting that was hard to shake, and foods the model kept mixing up. The story behind the 80% accuracy number in the paper.",
+    },
+  },
+  {
     id: 3,
     slug: "blog-part2-bengkelhub",
     date: "2026-07-09",

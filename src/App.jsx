@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useClickSound } from "./hooks/useClickSound";
 import BottomNav from "./components/BottomNav";
 import Preloader from "./components/Preloader";
 import Footer from "./components/Footer";
@@ -48,6 +49,8 @@ export default function App() {
   );
   const [nav, setNav] = useState(() => navFromPath(window.location.pathname));
   const [projectsTab, setProjectsTab] = useState("showcase");
+
+  useClickSound();
 
   const PAGE_TITLES = {
     home: "Naufal Andresya Kholish",
